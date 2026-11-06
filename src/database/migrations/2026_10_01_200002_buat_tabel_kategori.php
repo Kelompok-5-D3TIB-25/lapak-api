@@ -6,19 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        //
+        Schema::create('kategori', function (Blueprint $tabel) {
+            $tabel->id();
+            $tabel->string('nama', 60);
+            $tabel->string('slug', 80)->unique();
+            $tabel->timestamps();
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('kategori');
     }
 };
