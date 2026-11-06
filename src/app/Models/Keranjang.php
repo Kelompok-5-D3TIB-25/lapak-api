@@ -11,12 +11,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 final class Keranjang extends Model
 {
     protected $table = 'keranjang';
+
     protected $fillable = [];
+
     /** @return BelongsTo<Pengguna, $this> */
     public function pengguna(): BelongsTo
     {
         return $this->belongsTo(Pengguna::class, 'pengguna_id');
     }
+
     /** @return HasMany<ButirKeranjang, $this> */
     public function butir(): HasMany
     {

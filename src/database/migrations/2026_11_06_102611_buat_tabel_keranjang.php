@@ -24,6 +24,7 @@ return new class extends Migration
             $tabel->unique(['keranjang_id', 'produk_id']);
         });
     }
+
     public function down(): void
     {
         Schema::dropIfExists('butir_keranjang');
