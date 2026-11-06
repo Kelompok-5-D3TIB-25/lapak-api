@@ -12,7 +12,7 @@ use App\Domain\Uang;
 final readonly class RincianToko
 {
     /**
-     * @param list<BarisBelanja> $baris
+     * @param  list<BarisBelanja>  $baris
      */
     public function __construct(
         public int $tokoId,
@@ -22,11 +22,13 @@ final readonly class RincianToko
         public Uang $ongkir,
         public Uang $komisi,
     ) {}
+
     /** Yang dibayar pembeli untuk toko ini. */
     public function total(): Uang
     {
         return $this->subtotal->tambah($this->ongkir);
     }
+
     /** Yang kelak dilepas ke saldo penjual: komisi hanya memotong subtotal, ongkir utuh (LP-8). */
     public function bagianPenjual(): Uang
     {

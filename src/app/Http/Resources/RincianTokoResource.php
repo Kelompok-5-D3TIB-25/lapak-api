@@ -18,7 +18,7 @@ final class RincianTokoResource extends JsonResource
     {
         return [
             'toko' => $this->namaToko,
-            'baris' => array_map(fn(BarisBelanja $baris) => [
+            'baris' => array_map(fn (BarisBelanja $baris) => [
                 'produk_id' => $baris->produkId,
                 'nama' => $baris->namaProduk,
                 'harga_satuan' => $baris->hargaSatuan,

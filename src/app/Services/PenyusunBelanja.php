@@ -18,7 +18,7 @@ use App\Models\Produk;
 final class PenyusunBelanja
 {
     /**
-     * @param list<array{produk_id: int, kuantitas: int}> $butir
+     * @param  list<array{produk_id: int, kuantitas: int}>  $butir
      * @return list<RincianToko>
      */
     public function susun(array $butir): array
@@ -58,6 +58,7 @@ final class PenyusunBelanja
                 'ongkir' => Uang::dari($barang->toko->ongkir_rupiah),
             ];
         }
+
         return (new PenghitungBelanja(config('lapak.komisi_persen')))->hitung($baris, $toko);
     }
 }

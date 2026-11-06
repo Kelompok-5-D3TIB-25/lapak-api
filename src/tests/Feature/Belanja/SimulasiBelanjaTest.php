@@ -10,7 +10,7 @@ beforeEach(function () {
         'harga_rupiah' => 185_000,
         'stok' => 5,
     ]);
-    $this->simulasi = fn(array $butir, array $lain = []) => $this->postJson(
+    $this->simulasi = fn (array $butir, array $lain = []) => $this->postJson(
         '/api/v1/simulasi-belanja',
         ['butir' => $butir] + $lain,
     );
