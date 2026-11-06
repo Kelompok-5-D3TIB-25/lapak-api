@@ -1,5 +1,7 @@
 <?php
+
 namespace Database\Seeders;
+
 use App\Enums\StatusProduk;
 use App\Enums\StatusToko;
 use App\Models\Kategori;
@@ -9,6 +11,7 @@ use App\Models\Toko;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use RuntimeException;
+
 /**
  * Seluruh toko, produk, dan harga di bawah ini adalah data simulasi untuk latihan.
  */
@@ -20,6 +23,7 @@ class KatalogSeeder extends Seeder
         'Kriya dan Dekorasi',
         'Minuman Tradisional',
     ];
+
     // [surel pemilik, nama toko, kota, ongkir, status, [[kategori, produk, harga, stok, berat, status]]]
     private const TOKO = [
         [
@@ -33,7 +37,7 @@ class KatalogSeeder extends Seeder
                 ['Batik dan Busana', 'Kain Batik Cap Sogan 2 Meter', 185_000, 25, 400, StatusProduk::Aktif],
                 ['Batik dan Busana', 'Selendang Batik Sutra', 320_000, 0, 150, StatusProduk::Aktif],
                 ['Batik dan Busana', 'Daster Batik Kencana', 95_000, 40, 250, StatusProduk::Draf],
-            ]
+            ],
         ],
         [
             'wulan@lapak.test',
@@ -46,7 +50,7 @@ class KatalogSeeder extends Seeder
                 ['Oleh-Oleh Kuliner', 'Abon Sapi Asli 200 g', 78_000, 35, 250, StatusProduk::Aktif],
                 ['Oleh-Oleh Kuliner', 'Keripik Paru Renyah 150 g', 54_000, 18, 200, StatusProduk::Aktif],
                 ['Oleh-Oleh Kuliner', 'Ampyang Kacang 300 g', 27_500, 45, 350, StatusProduk::Aktif],
-            ]
+            ],
         ],
         [
             'eko@lapak.test',
@@ -58,7 +62,7 @@ class KatalogSeeder extends Seeder
                 ['Kriya dan Dekorasi', 'Keranjang Rotan Anyam Sedang', 145_000, 12, 900, StatusProduk::Aktif],
                 ['Kriya dan Dekorasi', 'Kap Lampu Rotan Gantung', 210_000, 6, 700, StatusProduk::Aktif],
                 ['Kriya dan Dekorasi', 'Tatakan Gelas Rotan Isi 6', 48_000, 30, 200, StatusProduk::Aktif],
-            ]
+            ],
         ],
         [
             'tini@lapak.test',
@@ -69,9 +73,10 @@ class KatalogSeeder extends Seeder
             [
                 ['Minuman Tradisional', 'Wedang Uwuh Celup Isi 10', 22_000, 80, 120, StatusProduk::Aktif],
                 ['Minuman Tradisional', 'Jahe Merah Bubuk 250 g', 36_000, 50, 280, StatusProduk::Aktif],
-            ]
+            ],
         ],
     ];
+
     public function run(): void
     {
         $kategori = [];
@@ -82,7 +87,7 @@ class KatalogSeeder extends Seeder
             $pemilik = Pengguna::where('surel', $surel)->first()
                 ?? throw new RuntimeException("{$surel} belum ada. Jalankan PenggunaSeeder dulu.");
             // status dan pemilik_id tidak ada di $fillable, jadi diisi lewat forceFill.
-// forceFill hanya pantas di seeder dan service, tidak pernah dengan masukan klien.
+            // forceFill hanya pantas di seeder dan service, tidak pernah dengan masukan klien.
             $toko = Toko::firstOrNew(['slug' => Str::slug($namaToko)]);
             $toko->forceFill([
                 'pemilik_id' => $pemilik->id,
