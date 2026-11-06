@@ -1,7 +1,9 @@
 <?php
+
 use App\Models\Kategori;
 use App\Models\Produk;
 use App\Models\Toko;
+
 it('menampilkan produk aktif dari toko aktif dengan amplop berhalaman', function () {
     Produk::factory()->count(3)->create();
     $this->getJson('/api/v1/produk')
@@ -16,8 +18,8 @@ it('menampilkan produk aktif dari toko aktif dengan amplop berhalaman', function
                     'slug',
                     'harga' => ['rupiah', 'tampilan'],
                     'toko' => ['nama', 'slug', 'kota'],
-                ]
-            ]
+                ],
+            ],
         ]);
 });
 it('menyembunyikan produk draf dan produk dari toko yang belum aktif (LP-4)', function () {
@@ -58,7 +60,7 @@ it('membatasi ukuran halaman', function () {
 it('memperlakukan karakter pengganti pada pencarian sebagai teks biasa', function () {
     Produk::factory()->create(['nama' => 'Kain Batik Cap', 'slug' => 'kain-batik-cap']);
     Produk::factory()->create(['nama' => 'Paket Hemat 50% Intip', 'slug' => 'paket-hemat']);
-    $cari = fn(string $kata) => $this->getJson('/api/v1/produk?cari=' . urlencode($kata))->assertOk();
+    $cari = fn (string $kata) => $this->getJson('/api/v1/produk?cari='.urlencode($kata))->assertOk();
     $cari('%%')->assertJsonCount(0, 'data');
     $cari('50%')->assertJsonPath('data.0.slug', 'paket-hemat');
     $cari('b_tik')->assertJsonCount(0, 'data');
