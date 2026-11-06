@@ -1,4 +1,5 @@
 <?php
+
 arch('tidak ada alat debug yang tertinggal')
     ->expect(['dd', 'dump', 'var_dump', 'ray'])
     ->not->toBeUsed();

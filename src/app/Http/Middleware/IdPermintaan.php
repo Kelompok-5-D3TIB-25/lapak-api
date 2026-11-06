@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 final class IdPermintaan
 {
     public const HEADER = 'X-Request-Id';
+
     public function handle(Request $request, Closure $next): Response
     {
         $id = (string) Str::uuid();
@@ -24,6 +25,7 @@ final class IdPermintaan
         Log::withContext(['id_permintaan' => $id]);
         $respons = $next($request);
         $respons->headers->set(self::HEADER, $id);
+
         return $respons;
     }
 }

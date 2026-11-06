@@ -11,6 +11,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+
     public function boot(): void
     {
         // Di luar produksi, Eloquent menolak lazy loading, atribut yang belum dimuat,
