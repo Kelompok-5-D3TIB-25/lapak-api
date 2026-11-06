@@ -20,6 +20,7 @@ final readonly class BarisBelanja
             throw new InvalidArgumentException('Kuantitas minimal 1.');
         }
     }
+
     public function subtotal(): Uang
     {
         return $this->hargaSatuan->kali($this->kuantitas);
