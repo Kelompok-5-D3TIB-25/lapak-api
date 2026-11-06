@@ -2,45 +2,46 @@ name: CI
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [main]
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   kualitas:
-    name: Kualitas
+    name: kualitas
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: src
 
     env:
       DB_CONNECTION: sqlite
+      DB_DATABASE: ':memory:'
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
           extensions: mbstring, intl, pdo_sqlite
           coverage: none
 
-      - name: Install dependencies
+      - name: Pasang dependensi
         run: composer install --no-interaction --no-progress --prefer-dist
 
-      - name: Prepare environment
+      - name: Siapkan lingkungan
         run: |
           cp .env.example .env
           php artisan key:generate
           touch database/database.sqlite
 
-      - name: Code style
+      - name: Gaya kode
         run: ./vendor/bin/pint --test
 
-      - name: Run migrations and seed database
+      - name: Migrasi dan seeder dari basis data kosong
         run: php artisan migrate:fresh --seed --force
 
-      - name: Run tests
+      - name: Pengujian
         run: ./vendor/bin/pest --ci
