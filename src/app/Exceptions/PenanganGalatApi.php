@@ -25,14 +25,17 @@ final class PenanganGalatApi
         405 => ['METODE_TIDAK_DIIZINKAN', 'Metode HTTP tidak diizinkan pada alamat ini.'],
         429 => ['TERLALU_SERING', 'Terlalu banyak permintaan. Coba lagi sebentar.'],
     ];
+
     private const PESAN_HTTP_LAIN = ['GALAT_HTTP', 'Permintaan tidak dapat diproses.'];
+
     public static function daftarkan(Exceptions $exceptions): void
     {
-        $exceptions->shouldRenderJsonWhen(fn(Request $request) => $request->is('api/*'));
+        $exceptions->shouldRenderJsonWhen(fn (Request $request) => $request->is('api/*'));
         $exceptions->render(function (Throwable $galat, Request $request): ?JsonResponse {
             return $request->is('api/*') ? self::ubah($galat) : null;
         });
     }
+
     private static function ubah(Throwable $galat): JsonResponse
     {
         return match (true) {
@@ -62,8 +65,9 @@ final class PenanganGalatApi
             ),
         };
     }
+
     /**
-     * @param array<string, mixed> $rincian
+     * @param  array<string, mixed>  $rincian
      */
     private static function bentuk(
         int $status,
