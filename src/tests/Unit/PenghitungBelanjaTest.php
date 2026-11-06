@@ -47,8 +47,8 @@ it('tidak menciptakan atau menghilangkan satu rupiah pun', function () {
     }
 });
 it('menolak belanja kosong dan kuantitas nol', function () {
-    expect(fn() => (new PenghitungBelanja(5))->hitung([], tokoContoh()))
+    expect(fn () => (new PenghitungBelanja(5))->hitung([], tokoContoh()))
         ->toThrow(InvalidArgumentException::class)
-        ->and(fn() => new BarisBelanja(1, 'Kain', 1, Uang::dari(1_000), 0))
+        ->and(fn () => new BarisBelanja(1, 'Kain', 1, Uang::dari(1_000), 0))
         ->toThrow(InvalidArgumentException::class);
 });

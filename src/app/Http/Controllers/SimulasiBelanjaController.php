@@ -16,6 +16,7 @@ final class SimulasiBelanjaController extends Controller
     {
         $rincian = $penyusun->susun($request->butir());
         $total = PenghitungBelanja::totalBayar($rincian);
+
         return $this->sukses([
             'pesanan' => RincianTokoResource::collection($rincian),
             'total_bayar' => ['rupiah' => $total, 'tampilan' => $total->format()],
