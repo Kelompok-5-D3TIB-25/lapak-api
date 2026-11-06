@@ -17,7 +17,7 @@ beforeEach(function () {
     $this->escrow = $this->buku->dompetSistem(JenisDompet::Escrow);
     $this->pendapatan = $this->buku->dompetSistem(JenisDompet::Pendapatan);
     // Pembeli membayar: dana masuk dari dunia luar ke escrow.
-    $this->bayar = fn(int $rupiah, string $rujukan) => $this->buku->pindahkan(
+    $this->bayar = fn (int $rupiah, string $rujukan) => $this->buku->pindahkan(
         $this->eksternal,
         $this->escrow,
         Uang::dari($rupiah),
@@ -62,7 +62,7 @@ it('menjalankan alur escrow lengkap tanpa kehilangan satu rupiah pun', function 
 });
 it('menolak pemindahan melebihi saldo dan tidak meninggalkan mutasi separuh jalan', function () {
     ($this->bayar)(50_000, 'LPK-UJI-0003');
-    expect(fn() => $this->buku->pindahkan(
+    expect(fn () => $this->buku->pindahkan(
         $this->escrow,
         $this->pendapatan,
         Uang::dari(50_001),
@@ -74,7 +74,7 @@ it('menolak pemindahan melebihi saldo dan tidak meninggalkan mutasi separuh jala
         ->and($this->pendapatan->refresh()->saldo_rupiah)->toBe(0);
 });
 it('menolak pemindahan nol rupiah dan pemindahan ke dompet yang sama', function () {
-    $pindah = fn($dari, $ke, Uang $jumlah) => fn() => $this->buku->pindahkan(
+    $pindah = fn ($dari, $ke, Uang $jumlah) => fn () => $this->buku->pindahkan(
         $dari,
         $ke,
         $jumlah,
@@ -87,8 +87,8 @@ it('menolak pemindahan nol rupiah dan pemindahan ke dompet yang sama', function 
 it('melarang mutasi diubah atau dihapus (LP-13)', function () {
     ($this->bayar)(10_000, 'LPK-UJI-0004');
     $mutasi = MutasiSaldo::first();
-    expect(fn() => $mutasi->forceFill(['jumlah_rupiah' => 99])->save())->toThrow(LogicException::class)
-        ->and(fn() => $mutasi->delete())->toThrow(LogicException::class);
+    expect(fn () => $mutasi->forceFill(['jumlah_rupiah' => 99])->save())->toThrow(LogicException::class)
+        ->and(fn () => $mutasi->delete())->toThrow(LogicException::class);
 });
 it('memberi setiap penjual tepat satu dompet', function () {
     $penjual = Pengguna::factory()->create();

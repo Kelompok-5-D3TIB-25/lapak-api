@@ -12,7 +12,9 @@ use Illuminate\Console\Command;
 final class PeriksaBuku extends Command
 {
     protected $signature = 'lapak:periksa-buku';
+
     protected $description = 'Memeriksa empat invarian buku besar (LP-13); kode keluar 1 bila dilanggar.';
+
     public function handle(): int
     {
         $pelanggaran = [];
@@ -36,7 +38,7 @@ final class PeriksaBuku extends Command
             // 3. Saldo tersimpan harus sama dengan jumlah mutasinya.
             if ($dompet->saldo_rupiah !== $jumlahMutasi) {
                 $pelanggaran[] = "Saldo {$dompet->kode} tercatat {$dompet->saldo_rupiah}, "
-                    . "jumlah mutasinya {$jumlahMutasi}.";
+                    ."jumlah mutasinya {$jumlahMutasi}.";
             }
             // 4. Hanya dompet eksternal yang boleh negatif.
             if ($dompet->saldo_rupiah < 0 && $dompet->jenis !== JenisDompet::Eksternal) {
@@ -50,9 +52,11 @@ final class PeriksaBuku extends Command
             foreach ($pelanggaran as $pesan) {
                 $this->error($pesan);
             }
+
             return self::FAILURE;
         }
-        $this->info('Buku besar seimbang: ' . MutasiSaldo::query()->count() . ' mutasi, 0 pelanggaran.');
+        $this->info('Buku besar seimbang: '.MutasiSaldo::query()->count().' mutasi, 0 pelanggaran.');
+
         return self::SUCCESS;
     }
 }

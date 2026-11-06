@@ -27,12 +27,15 @@ final class BukuBesar
         if ($jenis === JenisDompet::Penjual) {
             throw new GalatDomain('LP-13', 'Dompet penjual harus diminta lewat dompetPenjual().');
         }
+
         return $this->ambilAtauBuat($jenis->value, $jenis, null);
     }
+
     public function dompetPenjual(Pengguna $penjual): Dompet
     {
-        return $this->ambilAtauBuat('penjual:' . $penjual->id, JenisDompet::Penjual, $penjual->id);
+        return $this->ambilAtauBuat('penjual:'.$penjual->id, JenisDompet::Penjual, $penjual->id);
     }
+
     /**
      * @return string kelompok mutasi, untuk ditelusuri di kemudian hari
      */
@@ -50,6 +53,7 @@ final class BukuBesar
         if ($dari->is($ke)) {
             throw new GalatDomain('LP-13', 'Dompet asal dan tujuan tidak boleh sama.');
         }
+
         return DB::transaction(function () use (
             $dari,
             $ke,
@@ -76,9 +80,11 @@ final class BukuBesar
             $kelompok = (string) Str::uuid();
             $this->catat($asal, -$jumlah->rupiah, $kelompok, $jenis, $rujukan, $keterangan);
             $this->catat($tujuan, $jumlah->rupiah, $kelompok, $jenis, $rujukan, $keterangan);
+
             return $kelompok;
         });
     }
+
     private function catat(
         Dompet $dompet,
         int $jumlahBertanda,
@@ -100,6 +106,7 @@ final class BukuBesar
         ])->save();
         $dompet->forceFill(['saldo_rupiah' => $saldoBaru])->save();
     }
+
     private function ambilAtauBuat(string $kode, JenisDompet $jenis, ?int $penggunaId): Dompet
     {
         $dompet = Dompet::query()->where('kode', $kode)->first();
@@ -112,6 +119,7 @@ final class BukuBesar
                 'saldo_rupiah' => 0,
             ])->save();
         }
+
         return $dompet;
     }
 }

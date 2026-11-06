@@ -7,7 +7,7 @@ namespace App\Exceptions;
 final class ProdukTidakDapatDibeli extends GalatDomain
 {
     /**
-     * @param list<int> $idProduk
+     * @param  list<int>  $idProduk
      */
     public static function tidakTampil(array $idProduk): self
     {
@@ -15,6 +15,7 @@ final class ProdukTidakDapatDibeli extends GalatDomain
             'produk_id' => $idProduk,
         ]);
     }
+
     public static function stokKurang(int $idProduk, string $nama, int $diminta, int $tersedia): self
     {
         return new self('LP-4', "Stok {$nama} tidak mencukupi.", 409, [

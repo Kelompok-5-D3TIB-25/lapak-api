@@ -14,9 +14,10 @@ use InvalidArgumentException;
 final readonly class PenghitungBelanja
 {
     public function __construct(private int $komisiPersen) {}
+
     /**
-     * @param list<BarisBelanja> $baris
-     * @param array<int, array{nama: string, ongkir: Uang}> $toko dikunci id toko
+     * @param  list<BarisBelanja>  $baris
+     * @param  array<int, array{nama: string, ongkir: Uang}>  $toko  dikunci id toko
      * @return list<RincianToko> satu rincian per toko, urut id toko
      */
     public function hitung(array $baris, array $toko): array
@@ -33,7 +34,7 @@ final readonly class PenghitungBelanja
         foreach ($perToko as $tokoId => $barisToko) {
             $subtotal = array_reduce(
                 $barisToko,
-                fn(Uang $jumlah, BarisBelanja $butir) => $jumlah->tambah($butir->subtotal()),
+                fn (Uang $jumlah, BarisBelanja $butir) => $jumlah->tambah($butir->subtotal()),
                 Uang::nol(),
             );
             $rincian[] = new RincianToko(
@@ -45,16 +46,18 @@ final readonly class PenghitungBelanja
                 komisi: $subtotal->persen($this->komisiPersen),
             );
         }
+
         return $rincian;
     }
+
     /**
-     * @param list<RincianToko> $rincian
+     * @param  list<RincianToko>  $rincian
      */
     public static function totalBayar(array $rincian): Uang
     {
         return array_reduce(
             $rincian,
-            fn(Uang $jumlah, RincianToko $toko) => $jumlah->tambah($toko->total()),
+            fn (Uang $jumlah, RincianToko $toko) => $jumlah->tambah($toko->total()),
             Uang::nol(),
         );
     }
