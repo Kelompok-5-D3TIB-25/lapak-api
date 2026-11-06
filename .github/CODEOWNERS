@@ -18,19 +18,20 @@
 /src/tests/Feature/Katalog/                         @victor-isMe
 
 # D3 Keranjang dan Pesanan
-/src/app/Domain/                                    @mrdaknsh
-/src/app/Models/Keranjang.php                       @mrdaknsh
-/src/app/Models/ButirKeranjang.php                  @mrdaknsh
-/src/app/Services/PenyusunBelanja.php               @mrdaknsh
-/src/routes/api/belanja.php                         @mrdaknsh
-/src/tests/Feature/Belanja/                         @mrdaknsh
+/src/app/Models/Keranjang.php        @nabelazahra-ptr26
+/src/app/Models/ButirKeranjang.php   @nabelazahra-ptr26
+/src/app/Services/PenyusunBelanja.php @nabelazahra-ptr26
+/src/routes/api/belanja.php          @nabelazahra-ptr26
+/src/tests/Feature/Belanja/          @nabelazahra-ptr26
+/src/app/Domain/Belanja/             @nabelazahra-ptr26
 
 # D4 Pembayaran dan Saldo
-/src/app/Models/Dompet.php                          @nabelazahra-ptr26
-/src/app/Models/MutasiSaldo.php                     @nabelazahra-ptr26
-/src/app/Services/BukuBesar.php                     @nabelazahra-ptr26
-/src/app/Console/Commands/PeriksaBuku.php           @nabelazahra-ptr26
-/src/tests/Feature/Dompet/                          @nabelazahra-ptr26
+/src/app/Domain/Uang.php             @mrdaknsh
+/src/app/Models/Dompet.php           @mrdaknsh
+/src/app/Models/MutasiSaldo.php      @mrdaknsh
+/src/app/Services/BukuBesar.php      @mrdaknsh
+/src/app/Console/Commands/PeriksaBuku.php @mrdaknsh
+/src/tests/Feature/Dompet/           @mrdaknsh
 
 # D5 Otorisasi, Audit, dan Kualitas, termasuk seluruh berkas bersama
 /src/app/Exceptions/                                @Rokkett2500
