@@ -2,15 +2,15 @@
 
 - Integrator: @Rokkett2500
 - Tag penutup: `sesi-1`
-- Status: penutup
+- Status: selesai
 
 ## Papan unggahan
 
 | PR | Unggahan | Cabang | Penulis | Isi | Status |
 |---|---|---|---|---|---|
-| #1 | Pembuka | `sesi-1/fondasi` | Kelimanya | Kerangka Laravel, konfigurasi, pemuat rute | Merged |
-| #2 | Pembuka | `sesi-1/fondasi` | Kelimanya | Lanjutan fondasi | Merged |
-| #3 | Pembuka | `sesi-1/fondasi` | Kelimanya | Dokumen tim | Merged |
+| #1 | Pembuka | `sesi-1/fondasi` | @ihsanpradipta45-alt | Kerangka Laravel, konfigurasi, pemuat rute, Pest | Merged |
+| #2 | Pembuka | `sesi-1/fondasi` | @victor-isMe | Dokumen tim | Merged |
+| #3 | A3 | `sesi-1/fondasi` | @ihsanpradipta45-alt | Tabel, model, factory, dan akun contoh pengguna | Merged |
 | #4 | A2 | `sesi-1/kontrak-uang-kelompok5` | @mrdaknsh | Value object `Uang` | Merged |
 | #5 | A5 | `sesi-1/kontrak-dompet-dimas` | @nabelazahra-ptr26 | Skema dan model dompet | Merged |
 | #6 | A1 | `kontrak-respons-lintar` | @Rokkett2500 | Amplop respons dan galat domain | Merged |
@@ -21,21 +21,34 @@
 | #11 | Perbaikan | `perbaikan-1to15-lintar` | @Rokkett2500 | Perbaikan Langkah 1–15 | Merged |
 | #12 | B4 | `sesi-1/belanja-bela` | @nabelazahra-ptr26 | Keranjang dan simulasi belanja | Merged |
 | #13 | B5 | `sesi-1/buku-besar-ida` | @mrdaknsh | Buku besar dan pemeriksaannya | Merged |
-| #14 | Penutup | `sesi-1/penutup-...` | Integrator | Papan sesi, aturan, rekap | Draf |
+| #14 | B5 lanjutan | `sesi-1/buku-besar-ida` | @mrdaknsh | Perbaikan `KatalogSeeder` | Merged |
+| #15 | B5 lanjutan | `sesi-1/buku-besar-ida` | @mrdaknsh | Pemeriksaan buku besar di CI | Merged |
+| #16 | Penutup | `sesi-1/penutup-dipta` | @ihsanpradipta45-alt | Papan sesi, aturan bisnis, rekap | Merged |
+| #17 | Finalisasi | `finalisasi-fix` | @Rokkett2500 | Perbaikan akhir dan penutupan | Merged |
 
-> Penomoran PR mengikuti repo ini. HandsOn memakai #12 untuk penutup; di sini #11 adalah PR perbaikan, sehingga seluruh nomor bergeser.
+> Penomoran mengikuti repo ini. HandsOn memakai #12 untuk penutup; repo ini menambah satu PR perbaikan
+> dan tiga merge lanjutan pada cabang B5.
+
+## Rekap kontribusi
+
+```text
+<!-- REKAP -->
+```
 
 ## Catatan penutup
 
 ### Kendala
 
-- Konflik `DatabaseSeeder.php` saat rebase; diselesaikan dengan menyimpan `KatalogSeeder` dan `DompetSeeder`.
-- Nama migration keranjang sempat tidak mengikuti pola `2026_10_01_300001`.
-- `CODEOWNERS` sempat menukar kepemilikan D3 dan D4.
+- Konflik `DatabaseSeeder.php` saat rebase diselesaikan dengan mempertahankan `PenggunaSeeder`, `KatalogSeeder`, dan `DompetSeeder`.
+- Nama migration keranjang sempat tidak mengikuti pola `2026_10_01_300001`; sudah dirapikan pada PR finalisasi.
+- `CODEOWNERS` sempat menukar kepemilikan migration D3 dan D4; sudah diperbaiki.
+- `phpunit.xml` sempat tidak memaksa SQLite sehingga tes dari container berpotensi memakai MySQL; sudah diperbaiki dengan `force="true"`.
+- Atribusi A2/A5 tertukar dari pembagian nama di HandsOn: A2 dikerjakan Mirda dan A5 oleh Bela. Kontrak kode tetap sesuai.
 
 ### Titipan untuk integrator Sesi 2
 
-- Salin kerangka papan ini menjadi `docs/sesi/SESI-2.md`.
+- `main` hijau dan tag `sesi-1` sudah dipasang.
+- `docs/sesi/SESI-2.md` sudah disalin dari kerangka.
 - Latihan mandiri 1–6 wajib selesai sebelum Sesi 2.
-- CI memakai SQLite file (`src/database/database.sqlite`), bukan `:memory:`.
-- Isi dokumen domain yang masih kosong sebelum sesi berikutnya.
+- CI memakai SQLite file (`src/database/database.sqlite`).
+- `phpunit.xml` sudah memaksa SQLite di memori; jangan menghapus atribut `force="true"`.

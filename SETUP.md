@@ -1,186 +1,91 @@
-# Panduan setup
+# Panduan Setup
+
+## Kebutuhan
+
+- Git
+- Docker Desktop / Docker Engine + Docker Compose
+- (opsional) PHP 8.4 + Composer bila ingin menjalankan tanpa Docker
 
 ## Pertama Kali
 
-*(iki neng terminal WSL/Linux)*
-
-### 1. Clone Repository
+### 1. Clone repository
 
 ```bash
-git clone https://github.com/Rokkett2500/lapak-api.git
-```
-
-### 2. Masuk ke Folder Project
-
-```bash
+git clone https://github.com/Kelompok-5-D3TIB-25/lapak-api.git
 cd lapak-api
 ```
 
-### 3. Ubah Permission Folder
-
-```bash
-sudo chmod -R 777 .
-```
-
-**titik (`.`) di belakang ini penting, jangan diabaikan**
-
-### 4. Buat File `.env`
+### 2. Siapkan berkas lingkungan
 
 ```bash
 cp src/.env.example src/.env
 ```
 
-jika pakai Windows CMD:
-
-```cmd
-copy src\.env.example src\.env
-```
-
-### 5. Jalankan Docker
+### 3. Jalankan Docker
 
 ```bash
 docker compose up -d
+docker compose ps
 ```
 
-terus liatin aplikasi Docker Desktop > Containers > klik 2x bagian `lapak-api`.
+Tunggu sampai container `lapak` dan `lapak-db` berstatus `running`.
 
-kalo dah keluar `nginx : ready to handle connections` atau semacamnya, berarti udah nyala
-
-### 6. Buat Database SQLite
+### 4. Pasang dependensi
 
 ```bash
-docker compose exec app touch database/database.sqlite
+docker compose exec app composer install --no-interaction
 ```
 
-### 7. Generate Application Key
+### 5. Buat application key
 
 ```bash
 docker compose exec app php artisan key:generate
 ```
 
-### 8. Jalankan Migrasi dan Seeder
+### 6. Migrasi dan seeder
 
 ```bash
-docker compose exec app php artisan migrate --seed
+docker compose exec app php artisan migrate:fresh --seed
 ```
 
-### 8.1. Ubah Permission Folder Lagi
-
-```bash
-sudo chmod -R 777 .
-```
-
-(meneh, jogo2)
-
-### 9. Buka Aplikasi
+### 7. Buka aplikasi
 
 Buka [http://localhost:8000](http://localhost:8000).
 
----
-
-## Setelah Setup Pertama Kali
-
-Terus setelah 9, jalanin ini, dan ke depannya jalanin bawah ini aja
-
-### 1. Masuk ke Folder Project
+## Pemeriksaan sebelum PR
 
 ```bash
-cd lapak-api
+docker compose exec app ./vendor/bin/pint --test
+docker compose exec app php artisan test
+docker compose exec app php artisan lapak:periksa-buku
+docker compose exec app php artisan route:list --path=api/v1
 ```
 
-### 2. Fetch Update dari Remote
+`phpunit.xml` sudah memaksa SQLite di memori (`force="true"`), sehingga `php artisan test`
+tidak menyentuh database MySQL.
+
+## Alur kerja harian
 
 ```bash
-git fetch origin
-```
-
-### 3. Pindah ke Branch `main`
-
-```bash
-git checkout main
-```
-
-### 4. Pull Update Terbaru
-
-```bash
+git switch main
 git pull origin main
+git switch -c sesi-<n>/<jenis>-<nama>
 ```
 
-### 5. Buat Branch Fitur
-
-```bash
-git checkout -b fitur-nama
-```
-
-Contoh:
-
-```bash
-git checkout -b fitur-dipta
-```
-
-(Contone mau sek ws digarap dipta)
-
-Kalau lanjut branch lama:
-
-```bash
-git checkout fitur-dipta
-```
-
-### 6. Jalankan Docker
-
-```bash
-docker compose up -d
-```
-
-### 7. Jalankan Migrasi Jika Ada yang Baru
-
-Kalau ada migrasi baru dari teman:
-
-```bash
-docker compose exec app php artisan migrate
-```
-
-(jalanke ae nggo jogo2)
-
----
-
-## Setelah Selesai Ngoding
-
-### 1. Tambahkan Perubahan
+Setelah selesai:
 
 ```bash
 git add -A
+git commit -m "jelaskan perubahan secara singkat"
+git push -u origin sesi-<n>/<jenis>-<nama>
 ```
 
-### 2. Commit Perubahan
+Buka PR ke `main`, isi templat PR, dan minta satu rekan meninjau.
 
-```bash
-git commit -m "jelaskan sik mbok ubah opo, singkat ae"
-```
+## Catatan
 
-### 3. Push Branch ke GitHub
-
-```bash
-git push -u origin fitur-nama
-```
-
-Push berikutnya cukup:
-
-```bash
-git push
-```
-
----
-
-## Buat Pull Request
-
-### 4. Buka Repository GitHub
-
-Buka [https://github.com/Rokkett2500/lapak-api](https://github.com/Rokkett2500/lapak-api).
-
-1. Klik **Compare & pull request**.
-2. Pastikan:
-   - **base:** `main`
-   - **compare:** `fitur-nama` (branch punyamu tadi)
-3. Klik **Create pull request**.
-4. Tunggu biar yang lain merge.
+- Jangan meng-commit `src/.env`, `src/vendor/`, atau `src/database/database.sqlite`.
+- Database Docker memakai MySQL; tidak perlu membuat SQLite untuk menjalankan aplikasi.
+- Bila konfigurasi berubah: `docker compose exec app php artisan config:clear`.
+- Bila migrasi gagal karena nama migration berubah:
+  `docker compose exec app php artisan migrate:fresh --seed`.

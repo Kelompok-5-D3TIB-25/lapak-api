@@ -18,10 +18,19 @@ Lihat [`SETUP.md`](SETUP.md).
 
 ```bash
 docker compose up -d
+docker compose exec app composer install
 docker compose exec app php artisan migrate:fresh --seed
 ```
 
 Aplikasi: `http://localhost:8000`.
+
+## Pemeriksaan kualitas
+
+```bash
+docker compose exec app ./vendor/bin/pint --test
+docker compose exec app php artisan test
+docker compose exec app php artisan lapak:periksa-buku
+```
 
 ## Endpoint Sesi 1
 
@@ -41,8 +50,7 @@ Aplikasi: `http://localhost:8000`.
 - [`docs/KONTRAK-API.md`](docs/KONTRAK-API.md) — amplop respons dan kode galat
 - [`docs/ATURAN-BISNIS.md`](docs/ATURAN-BISNIS.md) — LP-1 sampai LP-17
 - [`docs/domain/`](docs/domain/) — piagam tiap domain
+- [`docs/sesi/SESI-1.md`](docs/sesi/SESI-1.md) — papan Sesi 1
+- [`docs/sesi/SESI-2.md`](docs/sesi/SESI-2.md) — papan Sesi 2
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — aturan cabang dan PR
-Untuk src/README.md, ganti README bawaan Laravel dengan satu baris:
-# Lapak — Aplikasi Laravel
-
-Kode aplikasi. Dokumentasi proyek ada di [`../README.md`](../README.md) dan [`../docs/`](../docs/).
+- [`scripts/rekap-sesi.sh`](scripts/rekap-sesi.sh) — rekap kontribusi per sesi
