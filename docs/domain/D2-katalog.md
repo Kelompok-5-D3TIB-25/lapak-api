@@ -14,7 +14,7 @@ Apa yang dijual, oleh siapa, dan mana yang boleh tampil?
 
 ## Yang disediakan untuk domain lain
 
-- `Produk::query()->tampil()` — produk aktif dari toko aktif, stok > 0.
+- `Produk::query()->tampil()` — produk aktif dari toko aktif.
 - `Toko` — `ongkir_rupiah` untuk perhitungan belanja.
 - `Produk` — `harga_rupiah`, `stok`, `berat_gram`, `slug`.
 
@@ -28,7 +28,7 @@ Apa yang dijual, oleh siapa, dan mana yang boleh tampil?
 
 - Satu pengguna paling banyak satu toko (LP-3).
 - Toko baru berstatus `menunggu` sampai disetujui admin.
-- Produk hanya tampil bila `status = aktif`, toko `aktif`, dan `stok > 0` (LP-4).
+- Produk hanya tampil bila `status = aktif` dan toko `aktif` (LP-4). Stok diperiksa saat simulasi dan checkout, bukan saat menampilkan katalog.
 - Harga selalu dari basis data; kiriman klien diabaikan (LP-6).
 - Pencarian memperlakukan `%` dan `_` sebagai teks, bukan wildcard.
 
