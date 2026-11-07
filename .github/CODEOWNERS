@@ -1,10 +1,15 @@
 # Pemilik berkas otomatis diminta meninjau setiap PR yang menyentuh berkasnya.
 # Berkas ini hanya disunting integrator, pada unggahan pembuka tiap sesi.
-# Ganti @akun-... dengan nama akun GitHub anggota tim Anda.
 
 # D1 Identitas dan Sesi
 /src/app/Models/Pengguna.php                        @ihsanpradipta45-alt
+/src/app/Models/Sesi.php                            @ihsanpradipta45-alt
 /src/app/Http/Controllers/RegistrasiController.php  @ihsanpradipta45-alt
+/src/app/Http/Controllers/MasukController.php       @ihsanpradipta45-alt
+/src/app/Http/Controllers/SesiController.php        @ihsanpradipta45-alt
+/src/app/Services/PenerbitSesi.php                  @ihsanpradipta45-alt
+/src/app/Services/PemeriksaSesi.php                 @ihsanpradipta45-alt
+/src/app/Services/PemeriksaKataSandi.php            @ihsanpradipta45-alt
 /src/routes/api/identitas.php                       @ihsanpradipta45-alt
 /src/tests/Feature/Identitas/                       @ihsanpradipta45-alt
 /src/config/auth.php                                @ihsanpradipta45-alt
@@ -14,37 +19,47 @@
 /src/app/Models/Kategori.php                        @victor-isMe
 /src/app/Models/Produk.php                          @victor-isMe
 /src/app/Http/Controllers/KatalogController.php     @victor-isMe
+/src/app/Http/Controllers/TokoSayaController.php    @victor-isMe
+/src/app/Http/Controllers/ProdukSayaController.php  @victor-isMe
 /src/routes/api/katalog.php                         @victor-isMe
 /src/tests/Feature/Katalog/                         @victor-isMe
 
 # D3 Keranjang dan Pesanan
-/src/app/Models/Keranjang.php        @nabelazahra-ptr26
-/src/app/Models/ButirKeranjang.php   @nabelazahra-ptr26
-/src/app/Services/PenyusunBelanja.php @nabelazahra-ptr26
-/src/routes/api/belanja.php          @nabelazahra-ptr26
-/src/tests/Feature/Belanja/          @nabelazahra-ptr26
-/src/app/Domain/Belanja/             @nabelazahra-ptr26
+/src/app/Models/Keranjang.php                       @nabelazahra-ptr26
+/src/app/Models/ButirKeranjang.php                  @nabelazahra-ptr26
+/src/app/Services/PenyusunBelanja.php               @nabelazahra-ptr26
+/src/app/Services/LayananKeranjang.php              @nabelazahra-ptr26
+/src/app/Http/Controllers/KeranjangController.php   @nabelazahra-ptr26
+/src/routes/api/belanja.php                         @nabelazahra-ptr26
+/src/tests/Feature/Belanja/                         @nabelazahra-ptr26
+/src/app/Domain/Belanja/                            @nabelazahra-ptr26
 
 # D4 Pembayaran dan Saldo
-/src/app/Domain/Uang.php             @mrdaknsh
-/src/app/Models/Dompet.php           @mrdaknsh
-/src/app/Models/MutasiSaldo.php      @mrdaknsh
-/src/app/Services/BukuBesar.php      @mrdaknsh
-/src/app/Console/Commands/PeriksaBuku.php @mrdaknsh
-/src/tests/Feature/Dompet/           @mrdaknsh
+/src/app/Domain/Uang.php                            @mrdaknsh
+/src/app/Models/Dompet.php                          @mrdaknsh
+/src/app/Models/MutasiSaldo.php                     @mrdaknsh
+/src/app/Services/BukuBesar.php                     @mrdaknsh
+/src/app/Http/Controllers/DompetController.php      @mrdaknsh
+/src/routes/api/dompet.php                          @mrdaknsh
+/src/app/Console/Commands/PeriksaBuku.php           @mrdaknsh
+/src/tests/Feature/Dompet/                          @mrdaknsh
 
 # D5 Otorisasi, Audit, dan Kualitas, termasuk seluruh berkas bersama
 /src/app/Exceptions/                                @Rokkett2500
 /src/app/Http/Concerns/                             @Rokkett2500
 /src/app/Http/Middleware/                           @Rokkett2500
+/src/app/Console/Commands/PangkasSesi.php           @Rokkett2500
 /src/bootstrap/app.php                              @Rokkett2500
 /src/app/Providers/                                 @Rokkett2500
 /src/routes/api.php                                 @Rokkett2500
 /src/routes/api/sistem.php                          @Rokkett2500
+/src/routes/console.php                             @Rokkett2500
 /src/config/lapak.php                               @Rokkett2500
 /src/composer.json                                  @Rokkett2500
 /.github/                                           @Rokkett2500
 /docs/KONTRAK-API.md                                @Rokkett2500
+/src/tests/TestCase.php                             @Rokkett2500
+/src/tests/Pest.php                                 @Rokkett2500
 /src/tests/Feature/Sistem/                          @Rokkett2500
 
 # Migration dan seeder: pemiliknya ditentukan digit domain pada nama berkas
@@ -54,3 +69,6 @@
 /src/database/migrations/*_4000*.php                @mrdaknsh
 /src/database/migrations/*_5000*.php                @Rokkett2500
 /src/database/seeders/DatabaseSeeder.php            @Rokkett2500
+
+# Pengecualian: pada CODEOWNERS, pola yang cocok paling akhir yang menang.
+/src/app/Domain/Sesi/                               @ihsanpradipta45-alt
