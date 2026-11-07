@@ -32,7 +32,38 @@
 ## Rekap kontribusi
 
 ```text
-<!-- REKAP -->
+== Commit per anggota (sesi-1, tanpa merge commit)
+    13	Rokkett2500
+     9	Pradipta-ihsan-ariyanto
+     8	mrdaknsh
+     6	victor-isMe
+     2	belazahra
+
+== Baris ditambah dan dihapus per anggota
+belazahra    +805 -81
+mrdaknsh     +511 -26
+Pradipta-ihsan-ariyanto +2437 -255
+Rokkett2500  +14381 -521
+victor-isMe  +754 -0
+
+== PR yang masuk ke main
+   Merge pull request #17 from Kelompok-5-D3TIB-25/finalisasi-fix
+   Merge pull request #16 from Kelompok-5-D3TIB-25/sesi-1/penutup-dipta
+   Merge pull request #15 from Kelompok-5-D3TIB-25/sesi-1/buku-besar-ida
+   Merge pull request #14 from Kelompok-5-D3TIB-25/sesi-1/buku-besar-ida
+   Merge pull request #13 from Kelompok-5-D3TIB-25/sesi-1/buku-besar-ida
+   Merge pull request #12 from Kelompok-5-D3TIB-25/sesi-1/belanja-bela
+   Merge pull request #11 from Kelompok-5-D3TIB-25/perbaikan-1to15-lintar
+   Merge pull request #10 from Rokkett2500/sesi-1/katalog-faiz
+   Merge pull request #9 from Rokkett2500/sesi-1/registrasi-dipta
+   Merge pull request #8 from Rokkett2500/sesi-1/galat-dan-ci-lintar
+   Merge pull request #5 from Rokkett2500/sesi-1/kontrak-dompet-dimas
+   Merge pull request #7 from Rokkett2500/sesi-1/kontrak-katalog-faiz
+   Merge pull request #4 from Rokkett2500/sesi-1/kontrak-uang-kelompok5
+   Merge pull request #6 from Rokkett2500/kontrak-respons-lintar
+   Merge pull request #3 from Rokkett2500/sesi-1/fondasi
+   Merge pull request #2 from Rokkett2500/sesi-1/fondasi
+   Merge pull request #1 from Rokkett2500/sesi-1/fondasi
 ```
 
 ## Catatan penutup
