@@ -88,7 +88,7 @@ Pelanggaran aturan bisnis membawa kode `LP-1` sampai `LP-17` pada `galat.kode`. 
 
 Parameter: `kategori`, `toko`, `cari`, `harga_min`, `harga_maks`, `tersedia`, `urut` (`terbaru`, `harga_naik`, `harga_turun`), `per_halaman` (1–60), `halaman`.
 
-Hanya produk berstatus `aktif`, dari toko `aktif`, dengan `stok > 0` (LP-4).
+Hanya produk berstatus `aktif` dan berasal dari toko `aktif` (LP-4). Stok tidak menyaring katalog; ketersediaan stok diperiksa saat simulasi dan checkout.
 
 ### `POST /registrasi`
 

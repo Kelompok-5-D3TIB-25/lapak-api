@@ -43,14 +43,14 @@
 /src/routes/api/sistem.php                          @Rokkett2500
 /src/config/lapak.php                               @Rokkett2500
 /src/composer.json                                  @Rokkett2500
-/.github/                                       @Rokkett2500
-/docs/KONTRAK-API.md                            @Rokkett2500
+/.github/                                           @Rokkett2500
+/docs/KONTRAK-API.md                                @Rokkett2500
 /src/tests/Feature/Sistem/                          @Rokkett2500
 
 # Migration dan seeder: pemiliknya ditentukan digit domain pada nama berkas
 /src/database/migrations/*_1000*.php                @ihsanpradipta45-alt
 /src/database/migrations/*_2000*.php                @victor-isMe
-/src/database/migrations/*_3000*.php                @mrdaknsh
-/src/database/migrations/*_4000*.php                @nabelazahra-ptr26
+/src/database/migrations/*_3000*.php                @nabelazahra-ptr26
+/src/database/migrations/*_4000*.php                @mrdaknsh
 /src/database/migrations/*_5000*.php                @Rokkett2500
 /src/database/seeders/DatabaseSeeder.php            @Rokkett2500
