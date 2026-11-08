@@ -30,7 +30,7 @@ final class PenanganGalatApi
 
     public static function daftarkan(Exceptions $exceptions): void
     {
-        $exceptions->shouldRenderJsonWhen(fn (Request $request) => $request->is('api/*'));
+        $exceptions->shouldRenderJsonWhen(fn(Request $request) => $request->is('api/*'));
         $exceptions->render(function (Throwable $galat, Request $request): ?JsonResponse {
             return $request->is('api/*') ? self::ubah($galat) : null;
         });
@@ -51,11 +51,15 @@ final class PenanganGalatApi
                 'Data yang dikirim tidak memenuhi syarat.',
                 $galat->errors(),
             ),
-            $galat instanceof AuthenticationException => self::bentuk(401, ...self::PESAN_HTTP[401]),
+            // Header baku RFC 6750: memberi tahu klien bahwa pintu ini meminta kunci Bearer.
+            $galat instanceof AuthenticationException => self::bentuk(401, ...self::PESAN_HTTP[401])
+                ->header('WWW-Authenticate', 'Bearer'),
+            // Header bawaan galat HTTP diteruskan. Tanpa ini Retry-After pada 429 hilang
+            // dan klien tidak tahu berapa lama harus menunggu.
             $galat instanceof HttpExceptionInterface => self::bentuk(
                 $galat->getStatusCode(),
                 ...(self::PESAN_HTTP[$galat->getStatusCode()] ?? self::PESAN_HTTP_LAIN),
-            ),
+            )->withHeaders($galat->getHeaders()),
             // Galat tak terduga: rincian hanya ke log, tidak pernah ke klien.
             default => self::bentuk(
                 500,
