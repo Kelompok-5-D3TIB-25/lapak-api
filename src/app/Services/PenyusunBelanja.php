@@ -11,6 +11,7 @@ use App\Domain\Belanja\PenghitungBelanja;
 use App\Domain\Belanja\RincianToko;
 use App\Domain\Uang;
 use App\Exceptions\ProdukTidakDapatDibeli;
+use App\Models\Pengguna;
 use App\Models\Produk;
 
 /**
@@ -24,9 +25,10 @@ final class PenyusunBelanja
      * Dipakai keranjang: isi keranjang bisa menjadi basi, dan membukanya tidak boleh gagal.
      *
      * @param list<array{produk_id: int, kuantitas: int}> $butir
+     * @param Pengguna|null $pembeli bila diisi, produk dari toko miliknya ikut ditandai (LP-5)
      * @return array{0: list<RincianToko>, 1: list<ButirBermasalah>}
      */
-    public function pilah(array $butir): array
+    public function pilah(array $butir, ?Pengguna $pembeli = null): array
     {
         $diminta = collect($butir)->pluck('kuantitas', 'produk_id');
         $produk = Produk::query()
@@ -35,11 +37,14 @@ final class PenyusunBelanja
             ->whereIn('id', $diminta->keys())
             ->get()
             ->keyBy('id');
+
         $baris = [];
         $toko = [];
         $bermasalah = [];
+
         foreach ($diminta as $produkId => $kuantitas) {
             $barang = $produk[$produkId] ?? null;
+
             if ($barang === null) {
                 $bermasalah[] = new ButirBermasalah(
                     $produkId,
@@ -48,6 +53,17 @@ final class PenyusunBelanja
                 );
                 continue;
             }
+
+            if ($pembeli !== null && $barang->dimilikiOleh($pembeli)) {
+                $bermasalah[] = new ButirBermasalah(
+                    $produkId,
+                    $kuantitas,
+                    AlasanBermasalah::ProdukSendiri,
+                    $barang->nama,
+                );
+                continue;
+            }
+
             if ($barang->stok < $kuantitas) {
                 $bermasalah[] = new ButirBermasalah(
                     $produkId,
@@ -58,6 +74,7 @@ final class PenyusunBelanja
                 );
                 continue;
             }
+
             $baris[] = new BarisBelanja(
                 produkId: $barang->id,
                 namaProduk: $barang->nama,
@@ -65,36 +82,51 @@ final class PenyusunBelanja
                 hargaSatuan: Uang::dari($barang->harga_rupiah),
                 kuantitas: $kuantitas,
             );
+
             $toko[$barang->toko_id] = [
                 'nama' => $barang->toko->nama,
                 'ongkir' => Uang::dari($barang->toko->ongkir_rupiah),
             ];
         }
+
         $rincian = $baris === []
             ? []
             : (new PenghitungBelanja(config('lapak.komisi_persen')))->hitung($baris, $toko);
+
         return [$rincian, $bermasalah];
     }
+
     /**
      * Versi tegas: satu butir bermasalah menggagalkan seluruhnya.
      * Dipakai simulasi sekarang dan checkout pada Sesi 4.
      *
      * @param list<array{produk_id: int, kuantitas: int}> $butir
+     * @param Pengguna|null $pembeli
      * @return list<RincianToko>
      */
-    public function susun(array $butir): array
+    public function susun(array $butir, ?Pengguna $pembeli = null): array
     {
-        [$rincian, $bermasalah] = $this->pilah($butir);
+        [$rincian, $bermasalah] = $this->pilah($butir, $pembeli);
+
         $hilang = [];
         foreach ($bermasalah as $masalah) {
             if ($masalah->alasan === AlasanBermasalah::TidakTersedia) {
                 $hilang[] = $masalah->produkId;
             }
         }
+
         if ($hilang !== []) {
             throw ProdukTidakDapatDibeli::tidakTampil($hilang);
         }
+
         foreach ($bermasalah as $masalah) {
+            if ($masalah->alasan === AlasanBermasalah::ProdukSendiri) {
+                throw ProdukTidakDapatDibeli::milikSendiri(
+                    $masalah->produkId,
+                    (string) $masalah->namaProduk,
+                );
+            }
+
             throw ProdukTidakDapatDibeli::stokKurang(
                 $masalah->produkId,
                 (string) $masalah->namaProduk,
@@ -102,6 +134,7 @@ final class PenyusunBelanja
                 (int) $masalah->stokTersedia,
             );
         }
+
         return $rincian;
     }
 }
