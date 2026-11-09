@@ -17,13 +17,14 @@ function beriPeranLangsung(Pengguna $pengguna, NamaPeran ...$peran): Pengguna
             'peran_id' => DB::table('peran')->where('nama', $nama->value)->value('id'),
         ]);
     }
+
     return $pengguna;
 }
 beforeEach(function () {
     Route::middleware(['api', 'auth:sesi', 'izin:produk.kelola'])
-        ->get('/api/_uji/kelola-produk', fn() => ['ok' => true]);
+        ->get('/api/_uji/kelola-produk', fn () => ['ok' => true]);
     Route::middleware(['api', 'auth:sesi', 'izin:buku-besar.lihat'])
-        ->get('/api/_uji/buku-besar', fn() => ['ok' => true]);
+        ->get('/api/_uji/buku-besar', fn () => ['ok' => true]);
     $this->pemeriksa = app(PemeriksaIzin::class);
 });
 it('menyalin pemetaan peran ke izin dari enum ke basis data, persis sama', function () {
@@ -34,7 +35,7 @@ it('menyalin pemetaan peran ke izin dari enum ke basis data, persis sama', funct
             ->where('peran.nama', $peran->value)
             ->pluck('izin.nama')
             ->all();
-        $diEnum = array_map(fn(NamaIzin $izin) => $izin->value, $peran->izinBawaan());
+        $diEnum = array_map(fn (NamaIzin $izin) => $izin->value, $peran->izinBawaan());
         expect($diBasisData)->toEqualCanonicalizing($diEnum);
     }
 });
@@ -77,7 +78,7 @@ it('menjawab 403 berbentuk kontrak bila peran tidak memegang izinnya', function 
 });
 it('memeriksa izin sebelum mencari objek yang disebut alamat', function () {
     Route::middleware(['api', 'auth:sesi', 'izin:peran.kelola'])
-        ->get('/api/_uji/pengguna/{pengguna}', fn(Pengguna $pengguna) => ['id' => $pengguna->id]);
+        ->get('/api/_uji/pengguna/{pengguna}', fn (Pengguna $pengguna) => ['id' => $pengguna->id]);
     $pembeli = beriPeranLangsung(Pengguna::factory()->create(), NamaPeran::Pembeli);
     $admin = beriPeranLangsung(Pengguna::factory()->create(), NamaPeran::Admin);
     // Yang tidak berwenang selalu menerima 403, ada atau tidak ada objeknya.
@@ -105,7 +106,7 @@ it('meloloskan setiap peran yang memegang izin itu, apa pun nama perannya (LP-2)
 ]);
 it('gagal keras bila rute menyebut izin yang tidak dikenal', function () {
     Route::middleware(['api', 'auth:sesi', 'izin:produk.kelolaa'])
-        ->get('/api/_uji/salah-ketik', fn() => 'ok');
+        ->get('/api/_uji/salah-ketik', fn () => 'ok');
     $this->sebagai(Pengguna::factory()->create())
         ->getJson('/api/_uji/salah-ketik')
         ->assertStatus(500);

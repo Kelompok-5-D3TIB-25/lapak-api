@@ -4,6 +4,7 @@ use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\ProdukSayaController;
 use App\Http\Controllers\TokoSayaController;
 use Illuminate\Support\Facades\Route;
+
 // Katalog bersifat publik dan hanya-baca.
 Route::get('produk', [KatalogController::class, 'index'])->name('produk.index');
 Route::get('produk/{slug}', [KatalogController::class, 'show'])->name('produk.show');

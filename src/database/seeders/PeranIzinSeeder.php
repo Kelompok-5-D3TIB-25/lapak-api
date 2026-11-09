@@ -7,6 +7,7 @@ use App\Enums\NamaPeran;
 use App\Models\Izin;
 use App\Models\Peran;
 use Illuminate\Database\Seeder;
+
 /*
 * Menyalin daftar peran dan izin dari enum ke basis data.
 * Aman dijalankan berulang kali, termasuk di produksi setiap kali ada rilis:
@@ -30,7 +31,7 @@ class PeranIzinSeeder extends Seeder
                 ['keterangan' => $nama->keterangan()],
             );
             // sync(): izin yang tidak lagi terdaftar ikut dilepas, bukan hanya yang baru ditambahkan.
-            $peran->izin()->sync(array_map(fn(NamaIzin $i) => $izin[$i->value], $nama->izinBawaan()));
+            $peran->izin()->sync(array_map(fn (NamaIzin $i) => $izin[$i->value], $nama->izinBawaan()));
         }
     }
 }

@@ -17,6 +17,7 @@ use Illuminate\Database\Seeder;
 class ContohMutasiSeeder extends Seeder
 {
     private const RUJUKAN = 'LPK-CONTOH-0001';
+
     public function run(BukuBesar $buku): void
     {
         // Idempoten: buku besar tidak boleh mencatat pesanan yang sama dua kali.
@@ -28,7 +29,7 @@ class ContohMutasiSeeder extends Seeder
         $escrow = $buku->dompetSistem(JenisDompet::Escrow);
         $pendapatan = $buku->dompetSistem(JenisDompet::Pendapatan);
         $penjual = $buku->dompetPenjual($sri);
-        $pindah = fn($dari, $ke, int $rupiah, JenisMutasi $jenis, string $catatan) => $buku
+        $pindah = fn ($dari, $ke, int $rupiah, JenisMutasi $jenis, string $catatan) => $buku
             ->pindahkan($dari, $ke, Uang::dari($rupiah), $jenis, self::RUJUKAN, $catatan);
         $pindah($luar, $escrow, 382_000, JenisMutasi::DanaMasuk, 'Pembayaran pembeli');
         $pindah($escrow, $pendapatan, 18_500, JenisMutasi::Komisi, 'Komisi 5%');

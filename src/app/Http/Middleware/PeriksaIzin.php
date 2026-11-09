@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 final class PeriksaIzin
 {
     public function __construct(private readonly PemeriksaIzin $pemeriksa) {}
+
     public function handle(Request $request, Closure $next, string $izin): Response
     {
         // NamaIzin::from melempar galat untuk nama yang salah ketik. Rute dengan izin
@@ -30,6 +31,7 @@ final class PeriksaIzin
         if (! $this->pemeriksa->punya($request->user(), NamaIzin::from($izin))) {
             throw new AuthorizationException;
         }
+
         return $next($request);
     }
 }

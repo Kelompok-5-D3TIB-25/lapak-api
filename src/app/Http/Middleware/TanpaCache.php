@@ -18,6 +18,7 @@ final class TanpaCache
     {
         $respons = $next($request);
         $respons->headers->set('Cache-Control', 'no-store');
+
         return $respons;
     }
 }

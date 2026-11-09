@@ -129,7 +129,7 @@ it('menolak kuantitas yang tidak masuk akal', function (mixed $kuantitas) {
 it('membatasi jumlah produk berbeda dalam satu keranjang', function () {
     config(['lapak.belanja.butir_maksimum' => 2]);
     $lain = Produk::factory()->count(2)->create(['stok' => 5]);
-    $taruh = fn(Produk $produk, int $kuantitas) => $this->putJson(
+    $taruh = fn (Produk $produk, int $kuantitas) => $this->putJson(
         "/api/v1/keranjang/butir/{$produk->id}",
         ['kuantitas' => $kuantitas],
     );

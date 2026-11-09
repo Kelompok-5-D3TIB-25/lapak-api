@@ -6,7 +6,7 @@ use App\Services\PenerbitSesi;
 
 beforeEach(function () {
     $this->sri = Pengguna::factory()->create(['kata_sandi' => 'BatikSolo2026']);
-    $this->terbit = fn(Pengguna $pengguna, string $perangkat) => app(PenerbitSesi::class)
+    $this->terbit = fn (Pengguna $pengguna, string $perangkat) => app(PenerbitSesi::class)
         ->terbitkan($pengguna, $perangkat);
 });
 it('menjawab siapa saya tanpa membocorkan kata sandi maupun hash kunci', function () {
@@ -41,17 +41,17 @@ it('mendaftar hanya sesi milik sendiri yang masih berlaku', function () {
 it('mencabut perangkat lain hanya dari sesi segar (LP-15)', function () {
     [$ponsel, $kunciPonsel] = ($this->terbit)($this->sri, 'Ponsel');
     $this->sebagai($this->sri, segar: false)
-        ->deleteJson('/api/v1/sesi/' . $ponsel->pengenal)
+        ->deleteJson('/api/v1/sesi/'.$ponsel->pengenal)
         ->assertForbidden()
         ->assertJsonPath('galat.kode', 'LP-15');
     $this->denganKunci($kunciPonsel)->getJson('/api/v1/saya')->assertOk();
-    $this->sebagai($this->sri)->deleteJson('/api/v1/sesi/' . $ponsel->pengenal)->assertOk();
+    $this->sebagai($this->sri)->deleteJson('/api/v1/sesi/'.$ponsel->pengenal)->assertOk();
     $this->denganKunci($kunciPonsel)->getJson('/api/v1/saya')->assertUnauthorized();
 });
 it('menjawab 404 untuk sesi milik orang lain dan membiarkannya tetap berlaku', function () {
     $wulan = Pengguna::factory()->create();
     [$sesiWulan, $kunciWulan] = ($this->terbit)($wulan, 'Laptop Wulan');
-    $this->sebagai($this->sri)->deleteJson('/api/v1/sesi/' . $sesiWulan->pengenal)->assertNotFound();
+    $this->sebagai($this->sri)->deleteJson('/api/v1/sesi/'.$sesiWulan->pengenal)->assertNotFound();
     $this->deleteJson('/api/v1/sesi/01JABCDEFGHJKMNPQRSTVWXYZ0')->assertNotFound();
     $this->denganKunci($kunciWulan)->getJson('/api/v1/saya')->assertOk();
     expect($sesiWulan->refresh()->dicabut_pada)->toBeNull();

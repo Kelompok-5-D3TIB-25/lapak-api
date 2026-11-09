@@ -4,6 +4,7 @@ use App\Enums\NamaPeran;
 use App\Models\Pengguna;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+
 /*
 | Matriks otorisasi: siapa boleh memanggil rute mana.
 |
@@ -20,9 +21,10 @@ use Illuminate\Support\Facades\Route;
 function matriksOtorisasi(): array
 {
     $matriks = [];
-    foreach (glob(__DIR__ . '/matriks/*.php') as $berkas) {
+    foreach (glob(__DIR__.'/matriks/*.php') as $berkas) {
         $matriks += require $berkas;
     }
+
     return $matriks;
 }
 /** @return list<string> "METODE alamat" seluruh rute /api/v1 yang berada di belakang auth:sesi */
@@ -38,6 +40,7 @@ function ruteTerlindung(): array
             $daftar[] = "{$metode} {$rute->uri()}";
         }
     }
+
     return $daftar;
 }
 it('memiliki tepat satu baris matriks untuk setiap rute terlindung', function () {
@@ -45,18 +48,18 @@ it('memiliki tepat satu baris matriks untuk setiap rute terlindung', function ()
     $baris = array_keys(matriksOtorisasi());
     $tanpaBaris = array_values(array_diff($rute, $baris));
     $barisUsang = array_values(array_diff($baris, $rute));
-    expect($tanpaBaris)->toBeEmpty('Rute tanpa baris matriks: ' . implode(', ', $tanpaBaris))
-        ->and($barisUsang)->toBeEmpty('Baris matriks tanpa rute: ' . implode(', ', $barisUsang));
+    expect($tanpaBaris)->toBeEmpty('Rute tanpa baris matriks: '.implode(', ', $tanpaBaris))
+        ->and($barisUsang)->toBeEmpty('Baris matriks tanpa rute: '.implode(', ', $barisUsang));
 });
 it('hanya menyebut peran yang dikenal', function () {
-    $dikenal = array_map(fn(NamaPeran $peran) => $peran->value, NamaPeran::cases());
+    $dikenal = array_map(fn (NamaPeran $peran) => $peran->value, NamaPeran::cases());
     $salah = [];
     foreach (matriksOtorisasi() as $rute => $boleh) {
         if ($boleh !== '*' && array_diff($boleh, $dikenal) !== []) {
             $salah[] = $rute;
         }
     }
-    expect($salah)->toBeEmpty('Baris dengan peran tak dikenal: ' . implode(', ', $salah));
+    expect($salah)->toBeEmpty('Baris dengan peran tak dikenal: '.implode(', ', $salah));
 });
 it('menolak dan meloloskan setiap peran persis seperti matriks', function () {
     $pemegang = [null, ...NamaPeran::cases()]; // null = pengguna tanpa peran apa pun
@@ -65,7 +68,7 @@ it('menolak dan meloloskan setiap peran persis seperti matriks', function () {
         [$metode, $alamat] = explode(' ', $rute);
         // Parameter alamat diisi angka yang tidak dimiliki siapa pun. Yang diuji gerbang izin,
         // bukan objeknya: peran yang lolos gerbang akan menerima 404 atau 422, dan itu sah.
-        $alamat = '/' . preg_replace('/\{[^}]+\}/', '999999', $alamat);
+        $alamat = '/'.preg_replace('/\{[^}]+\}/', '999999', $alamat);
         foreach ($pemegang as $peran) {
             $pengguna = Pengguna::factory()->create();
             if ($peran !== null) {
@@ -87,5 +90,5 @@ it('menolak dan meloloskan setiap peran persis seperti matriks', function () {
             }
         }
     }
-    expect($selisih)->toBeEmpty("Tidak sesuai matriks:\n" . implode("\n", $selisih));
+    expect($selisih)->toBeEmpty("Tidak sesuai matriks:\n".implode("\n", $selisih));
 });
