@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\KatalogController;
+use App\Http\Controllers\ModerasiTokoController;
 use App\Http\Controllers\ProdukSayaController;
 use App\Http\Controllers\TokoSayaController;
 use Illuminate\Support\Facades\Route;
