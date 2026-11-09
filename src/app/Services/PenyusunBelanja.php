@@ -24,8 +24,8 @@ final class PenyusunBelanja
      * Memilah butir menjadi yang dapat dihitung dan yang bermasalah, tanpa melempar galat.
      * Dipakai keranjang: isi keranjang bisa menjadi basi, dan membukanya tidak boleh gagal.
      *
-     * @param list<array{produk_id: int, kuantitas: int}> $butir
-     * @param Pengguna|null $pembeli bila diisi, produk dari toko miliknya ikut ditandai (LP-5)
+     * @param  list<array{produk_id: int, kuantitas: int}>  $butir
+     * @param  Pengguna|null  $pembeli  bila diisi, produk dari toko miliknya ikut ditandai (LP-5)
      * @return array{0: list<RincianToko>, 1: list<ButirBermasalah>}
      */
     public function pilah(array $butir, ?Pengguna $pembeli = null): array
@@ -51,6 +51,7 @@ final class PenyusunBelanja
                     $kuantitas,
                     AlasanBermasalah::TidakTersedia,
                 );
+
                 continue;
             }
 
@@ -61,6 +62,7 @@ final class PenyusunBelanja
                     AlasanBermasalah::ProdukSendiri,
                     $barang->nama,
                 );
+
                 continue;
             }
 
@@ -72,6 +74,7 @@ final class PenyusunBelanja
                     $barang->nama,
                     $barang->stok,
                 );
+
                 continue;
             }
 
@@ -100,8 +103,7 @@ final class PenyusunBelanja
      * Versi tegas: satu butir bermasalah menggagalkan seluruhnya.
      * Dipakai simulasi sekarang dan checkout pada Sesi 4.
      *
-     * @param list<array{produk_id: int, kuantitas: int}> $butir
-     * @param Pengguna|null $pembeli
+     * @param  list<array{produk_id: int, kuantitas: int}>  $butir
      * @return list<RincianToko>
      */
     public function susun(array $butir, ?Pengguna $pembeli = null): array
