@@ -12,12 +12,14 @@ final class MasukRequest extends FormRequest
     {
         return true;
     }
+
     protected function prepareForValidation(): void
     {
         if (is_string($this->input('surel'))) {
             $this->merge(['surel' => mb_strtolower(trim($this->input('surel')))]);
         }
     }
+
     /**
      * Aturan di sini sengaja longgar. Syarat panjang dan susunan kata sandi adalah urusan registrasi;
      * menerapkannya saat masuk hanya memberi tahu penyerang bentuk kata sandi yang sah.
@@ -30,6 +32,7 @@ final class MasukRequest extends FormRequest
             'nama_perangkat' => ['sometimes', 'string', 'max:60'],
         ];
     }
+
     public function namaPerangkat(): string
     {
         return $this->string('nama_perangkat', 'Perangkat tanpa nama')->toString();

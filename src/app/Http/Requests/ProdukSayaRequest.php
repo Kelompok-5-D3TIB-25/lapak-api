@@ -18,9 +18,11 @@ final class ProdukSayaRequest extends FormRequest
     {
         return true;
     }
+
     public function rules(): array
     {
         $wajib = $this->isMethod('POST') ? 'required' : 'sometimes';
+
         return [
             'nama' => [$wajib, 'string', 'min:3', 'max:120'],
             'kategori_id' => [$wajib, 'integer', Rule::exists('kategori', 'id')],

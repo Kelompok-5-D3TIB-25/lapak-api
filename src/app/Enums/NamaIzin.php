@@ -17,6 +17,7 @@ enum NamaIzin: string
     case TokoModerasi = 'toko.moderasi';
     case PeranKelola = 'peran.kelola';
     case BukuBesarLihat = 'buku-besar.lihat';
+
     public function keterangan(): string
     {
         return match ($this) {

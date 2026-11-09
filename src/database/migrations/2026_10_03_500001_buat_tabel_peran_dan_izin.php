@@ -36,6 +36,7 @@ return new class extends Migration
             $tabel->primary(['pengguna_id', 'peran_id']);
         });
     }
+
     public function down(): void
     {
         Schema::dropIfExists('pengguna_peran');

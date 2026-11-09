@@ -10,17 +10,20 @@ use Illuminate\Console\Command;
 final class PangkasSesi extends Command
 {
     protected $signature = 'lapak:pangkas-sesi';
+
     protected $description = 'Menghapus sesi yang sudah mati lebih lama dari masa simpan.';
+
     public function handle(): int
     {
         $batas = now()->subDays(config('lapak.sesi.simpan_hari'));
         // Hanya sesi yang sudah MATI yang dihapus. Sesi berlaku tidak pernah tersentuh perintah ini.
         $terhapus = Sesi::query()
-            ->where(fn($kueri) => $kueri
+            ->where(fn ($kueri) => $kueri
                 ->where('dicabut_pada', '<', $batas)
                 ->orWhere('kedaluwarsa_pada', '<', $batas))
             ->delete();
         $this->info("{$terhapus} sesi lama dipangkas.");
+
         return self::SUCCESS;
     }
 }

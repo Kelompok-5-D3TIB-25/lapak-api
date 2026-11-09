@@ -50,11 +50,13 @@ final class Produk extends Model
     {
         return $this->belongsTo(Kategori::class, 'kategori_id');
     }
+
     /** Dipakai LP-5. Relasi toko harus sudah dimuat; mode ketat menolak pemuatan malas. */
     public function dimilikiOleh(Pengguna $pengguna): bool
     {
         return $this->toko->pemilik_id === $pengguna->id;
     }
+
     /**
      * LP-4: produk tampil hanya bila berstatus aktif DAN tokonya aktif.
      * Seluruh pintu publik wajib lewat scope ini; jangan menulis ulang syaratnya di controller.
@@ -64,7 +66,7 @@ final class Produk extends Model
     public function scopeTampil(Builder $kueri): void
     {
         $kueri->where('produk.status', StatusProduk::Aktif)
-            ->whereHas('toko', fn(Builder $toko) => $toko->where('status', StatusToko::Aktif));
+            ->whereHas('toko', fn (Builder $toko) => $toko->where('status', StatusToko::Aktif));
     }
 
     /**
@@ -74,20 +76,20 @@ final class Produk extends Model
     public function scopeSaring(Builder $kueri, array $saringan): void
     {
         $kueri
-            ->when($saringan['kategori'] ?? null, fn(Builder $q, string $slug) => $q
-                ->whereHas('kategori', fn(Builder $k) => $k->where('slug', $slug)))
-            ->when($saringan['toko'] ?? null, fn(Builder $q, string $slug) => $q
-                ->whereHas('toko', fn(Builder $t) => $t->where('slug', $slug)))
+            ->when($saringan['kategori'] ?? null, fn (Builder $q, string $slug) => $q
+                ->whereHas('kategori', fn (Builder $k) => $k->where('slug', $slug)))
+            ->when($saringan['toko'] ?? null, fn (Builder $q, string $slug) => $q
+                ->whereHas('toko', fn (Builder $t) => $t->where('slug', $slug)))
             // Tanda % dan _ dari pengguna dijadikan teks biasa; tanpa ini "cari=%" cocok dengan semuanya.
-            ->when($saringan['cari'] ?? null, fn(Builder $q, string $kata) => $q->whereRaw(
+            ->when($saringan['cari'] ?? null, fn (Builder $q, string $kata) => $q->whereRaw(
                 "produk.nama like ? escape '!'",
-                ['%' . str_replace(['!', '%', '_'], ['!!', '!%', '!_'], $kata) . '%'],
+                ['%'.str_replace(['!', '%', '_'], ['!!', '!%', '!_'], $kata).'%'],
             ))
-            ->when(isset($saringan['harga_min']), fn(Builder $q) => $q
+            ->when(isset($saringan['harga_min']), fn (Builder $q) => $q
                 ->where('harga_rupiah', '>=', $saringan['harga_min']))
-            ->when(isset($saringan['harga_maks']), fn(Builder $q) => $q
+            ->when(isset($saringan['harga_maks']), fn (Builder $q) => $q
                 ->where('harga_rupiah', '<=', $saringan['harga_maks']))
-            ->when($saringan['tersedia'] ?? false, fn(Builder $q) => $q->where('stok', '>', 0));
+            ->when($saringan['tersedia'] ?? false, fn (Builder $q) => $q->where('stok', '>', 0));
     }
 
     /**

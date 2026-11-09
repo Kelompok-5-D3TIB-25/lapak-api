@@ -14,13 +14,16 @@ use Illuminate\Http\Resources\Json\JsonResource;
 final class SesiResource extends JsonResource
 {
     private bool $baruSajaDipakai = false;
+
     /** Untuk respons masuk dan konfirmasi: sesi ini pasti sesi milik permintaan yang sedang dijawab. */
     public static function saatIni(Sesi $sesi): self
     {
         $resource = new self($sesi);
         $resource->baruSajaDipakai = true;
+
         return $resource;
     }
+
     /** hash_kunci tidak ada di sini dan tidak akan pernah ada. */
     public function toArray(Request $request): array
     {

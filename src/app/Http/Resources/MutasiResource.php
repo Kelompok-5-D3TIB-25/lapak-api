@@ -18,11 +18,12 @@ final class MutasiResource extends JsonResource
     public function toArray(Request $request): array
     {
         $tanda = $this->jumlah_rupiah < 0 ? '-' : '+';
+
         return [
             'jenis' => $this->jenis->value,
             'jumlah' => [
                 'rupiah' => $this->jumlah_rupiah,
-                'tampilan' => $tanda . Uang::dari(abs($this->jumlah_rupiah))->format(),
+                'tampilan' => $tanda.Uang::dari(abs($this->jumlah_rupiah))->format(),
             ],
             'saldo_setelah' => $this->saldo_setelah,
             'rujukan' => $this->rujukan,

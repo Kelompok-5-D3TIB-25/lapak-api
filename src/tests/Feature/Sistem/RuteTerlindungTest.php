@@ -2,6 +2,7 @@
 
 use Illuminate\Routing\Route as Rute;
 use Illuminate\Support\Facades\Route;
+
 /*
 | Tolak secara bawaan.
 |
@@ -32,6 +33,7 @@ function ruteApi(): array
             $daftar[] = ["{$metode} {$rute->uri()}", $rute];
         }
     }
+
     return $daftar;
 }
 it('memasang auth:sesi pada setiap rute yang tidak terdaftar publik', function () {
@@ -42,12 +44,12 @@ it('memasang auth:sesi pada setiap rute yang tidak terdaftar publik', function (
             $terbuka[] = $nama;
         }
     }
-    expect($terbuka)->toBeEmpty('Rute tanpa auth:sesi: ' . implode(', ', $terbuka));
+    expect($terbuka)->toBeEmpty('Rute tanpa auth:sesi: '.implode(', ', $terbuka));
 });
 it('tidak menyimpan rute usang pada daftar publik', function () {
     $ada = array_column(ruteApi(), 0);
     $usang = array_values(array_diff(RUTE_PUBLIK, $ada));
-    expect($usang)->toBeEmpty('Rute publik yang sudah tidak ada: ' . implode(', ', $usang));
+    expect($usang)->toBeEmpty('Rute publik yang sudah tidak ada: '.implode(', ', $usang));
 });
 it('benar-benar menjawab 401 pada setiap rute terlindung bila kunci tidak dikirim', function () {
     $lolos = [];
@@ -56,10 +58,10 @@ it('benar-benar menjawab 401 pada setiap rute terlindung bila kunci tidak dikiri
             continue;
         }
         [$metode, $alamat] = explode(' ', $nama);
-        $alamat = '/' . preg_replace('/\{[^}]+\}/', '1', $alamat);
+        $alamat = '/'.preg_replace('/\{[^}]+\}/', '1', $alamat);
         if ($this->json($metode, $alamat)->status() !== 401) {
             $lolos[] = $nama;
         }
     }
-    expect($lolos)->toBeEmpty('Tidak menjawab 401 tanpa kunci: ' . implode(', ', $lolos));
+    expect($lolos)->toBeEmpty('Tidak menjawab 401 tanpa kunci: '.implode(', ', $lolos));
 });

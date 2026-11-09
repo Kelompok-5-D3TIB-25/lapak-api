@@ -30,7 +30,7 @@ final class PenanganGalatApi
 
     public static function daftarkan(Exceptions $exceptions): void
     {
-        $exceptions->shouldRenderJsonWhen(fn(Request $request) => $request->is('api/*'));
+        $exceptions->shouldRenderJsonWhen(fn (Request $request) => $request->is('api/*'));
         $exceptions->render(function (Throwable $galat, Request $request): ?JsonResponse {
             return $request->is('api/*') ? self::ubah($galat) : null;
         });

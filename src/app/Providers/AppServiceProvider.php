@@ -18,6 +18,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+
     public function boot(): void
     {
         // Di luar produksi, Eloquent menolak lazy loading, atribut yang belum dimuat,
@@ -26,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
         $this->daftarkanGuardSesi();
         $this->daftarkanPembatasLaju();
     }
+
     /**
      * Guard "sesi": membaca kunci dari header Authorization: Bearer, menanyakannya ke PemeriksaSesi,
      * lalu menitipkan sesi pada permintaan agar controller tidak perlu mencarinya lagi.
@@ -40,21 +42,23 @@ class AppServiceProvider extends ServiceProvider
             $request->attributes->set('sesi', $sesi);
             // Yang masuk log adalah pengenal sesi. Kunci utuh tidak pernah ditulis ke log.
             Log::withContext(['sesi' => $sesi->pengenal, 'pengguna' => $sesi->pengguna_id]);
+
             return $sesi->pengguna;
         });
     }
+
     private function daftarkanPembatasLaju(): void
     {
         // Dua lapis: per pasangan surel dan IP agar satu akun tidak ditebak terus-menerus,
         // dan per IP agar satu penyerang tidak mencoba banyak akun.
-        RateLimiter::for('masuk', fn(Request $request) => [
+        RateLimiter::for('masuk', fn (Request $request) => [
             Limit::perMinute(config('lapak.laju.masuk_per_akun'))
-                ->by('masuk:' . mb_strtolower((string) $request->input('surel')) . '|' . $request->ip()),
+                ->by('masuk:'.mb_strtolower((string) $request->input('surel')).'|'.$request->ip()),
             Limit::perMinute(config('lapak.laju.masuk_per_ip'))
-                ->by('masuk-ip:' . $request->ip()),
+                ->by('masuk-ip:'.$request->ip()),
         ]);
-        RateLimiter::for('konfirmasi', fn(Request $request) => Limit::perMinute(
+        RateLimiter::for('konfirmasi', fn (Request $request) => Limit::perMinute(
             config('lapak.laju.konfirmasi'),
-        )->by('konfirmasi:' . ($request->user()?->id ?? $request->ip())));
+        )->by('konfirmasi:'.($request->user()?->id ?? $request->ip())));
     }
 }

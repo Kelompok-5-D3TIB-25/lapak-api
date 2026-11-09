@@ -11,6 +11,7 @@ enum NamaPeran: string
     case Admin = 'admin';
     case Keuangan = 'keuangan';
     case Auditor = 'auditor';
+
     public function keterangan(): string
     {
         return match ($this) {
@@ -21,6 +22,7 @@ enum NamaPeran: string
             self::Auditor => 'Membaca buku besar tanpa hak tulis apa pun',
         };
     }
+
     /**
      * Izin bawaan tiap peran. Inilah satu-satunya tempat pemetaan ini ditulis;
      * PeranIzinSeeder menyalinnya ke basis data.
