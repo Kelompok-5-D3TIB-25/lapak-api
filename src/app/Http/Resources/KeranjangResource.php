@@ -21,11 +21,12 @@ final class KeranjangResource extends JsonResource
     {
         [$rincian, $bermasalah] = $this->resource;
         $total = PenghitungBelanja::totalBayar($rincian);
+
         return [
             'pesanan' => RincianTokoResource::collection($rincian),
             'total_bayar' => ['rupiah' => $total, 'tampilan' => $total->format()],
             // Butir yang masih ada di keranjang tetapi tidak dapat dibeli saat ini.
-            'tidak_tersedia' => array_map(fn(ButirBermasalah $butir) => [
+            'tidak_tersedia' => array_map(fn (ButirBermasalah $butir) => [
                 'produk_id' => $butir->produkId,
                 'kuantitas' => $butir->kuantitas,
                 'alasan' => $butir->alasan->value,

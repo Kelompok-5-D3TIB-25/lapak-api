@@ -10,7 +10,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 final class Peran extends Model
 {
     protected $table = 'peran';
+
     protected $fillable = ['nama', 'keterangan'];
+
     /** @return BelongsToMany<Izin, $this> */
     public function izin(): BelongsToMany
     {

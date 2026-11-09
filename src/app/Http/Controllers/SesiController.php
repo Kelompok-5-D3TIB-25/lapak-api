@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 final class SesiController extends Controller
 {
     public function __construct(private readonly PenerbitSesi $penerbit) {}
+
     /** GET /saya: siapa saya, dan lewat sesi yang mana. */
     public function saya(Request $request): JsonResponse
     {
@@ -25,6 +26,7 @@ final class SesiController extends Controller
             'sesi' => SesiResource::make(Sesi::dariPermintaan($request)),
         ]);
     }
+
     /** GET /sesi: seluruh perangkat yang sedang memegang kunci berlaku atas akun ini. */
     public function index(Request $request): JsonResponse
     {
@@ -34,14 +36,18 @@ final class SesiController extends Controller
             ->orderByDesc('terakhir_dipakai_pada')
             ->orderByDesc('id')
             ->get();
+
         return $this->sukses(SesiResource::collection($sesi));
     }
+
     /** POST /keluar: mencabut sesi yang sedang dipakai. Perangkat lain tidak terpengaruh. */
     public function keluar(Request $request): JsonResponse
     {
         $this->penerbit->cabut(Sesi::dariPermintaan($request));
+
         return $this->sukses();
     }
+
     /**
      * POST /sesi/konfirmasi: membuktikan ulang kata sandi (LP-15).
      * Sesi menjadi segar DAN kuncinya diganti. Bila kunci lama sudah telanjur dicuri,
@@ -55,11 +61,13 @@ final class SesiController extends Controller
         $sesi = Sesi::dariPermintaan($request);
         $this->penerbit->tandaiSegar($sesi);
         $kunciBaru = $this->penerbit->rotasi($sesi);
+
         return $this->sukses([
             'kunci' => $kunciBaru,
             'sesi' => SesiResource::saatIni($sesi),
         ]);
     }
+
     /**
      * DELETE /sesi/{pengenal}: mencabut satu perangkat.
      * Pencarian SELALU dibatasi pada sesi milik pengguna yang sedang masuk. Pengenal sesi orang lain
@@ -73,6 +81,7 @@ final class SesiController extends Controller
             ->where('pengenal', $pengenal)
             ->firstOrFail();
         $this->penerbit->cabut($sesi);
+
         return $this->sukses();
     }
 }

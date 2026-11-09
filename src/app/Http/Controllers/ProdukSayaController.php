@@ -22,19 +22,23 @@ final class ProdukSayaController extends Controller
             ->produk()
             ->orderByDesc('id')
             ->paginate(config('lapak.katalog.per_halaman_bawaan'), ['*'], 'halaman');
+
         return $this->berhalaman($halaman, ProdukSayaResource::class);
     }
+
     public function store(ProdukSayaRequest $request): JsonResponse
     {
         $toko = $this->tokoSaya($request);
         $data = $request->validated();
         $produk = new Produk(Arr::except($data, 'status'));
         $produk->toko_id = $toko->id;
-        $produk->slug = Str::slug($data['nama']) . '-' . Str::lower(Str::random(5));
+        $produk->slug = Str::slug($data['nama']).'-'.Str::lower(Str::random(5));
         $produk->status = StatusProduk::from($data['status'] ?? StatusProduk::Draf->value);
         $produk->save();
+
         return $this->sukses(ProdukSayaResource::make($produk->refresh()), 201);
     }
+
     public function update(ProdukSayaRequest $request, int $id): JsonResponse
     {
         $produk = $this->produkSaya($request, $id);
@@ -44,20 +48,25 @@ final class ProdukSayaController extends Controller
             $produk->status = StatusProduk::from($data['status']);
         }
         $produk->save();
+
         return $this->sukses(ProdukSayaResource::make($produk));
     }
+
     /** Produk tidak pernah dihapus, hanya diarsipkan: riwayat pesanan kelak masih merujuknya. */
     public function destroy(Request $request, int $id): JsonResponse
     {
         $produk = $this->produkSaya($request, $id);
         $produk->status = StatusProduk::Arsip;
         $produk->save();
+
         return $this->sukses(ProdukSayaResource::make($produk));
     }
+
     private function tokoSaya(Request $request): Toko
     {
         return Toko::query()->milik($request->user())->firstOrFail();
     }
+
     /**
      * Produk dicari MELALUI toko milik pengguna, bukan langsung dari tabel produk.
      * Angka id produk toko lain menghasilkan 404, sama seperti id yang tidak pernah ada.

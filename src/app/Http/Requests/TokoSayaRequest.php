@@ -16,10 +16,12 @@ final class TokoSayaRequest extends FormRequest
     {
         return true;
     }
+
     public function rules(): array
     {
         // Saat PATCH, kolom yang tidak dikirim tidak ikut divalidasi dan tidak ikut berubah.
         $wajib = $this->isMethod('POST') ? 'required' : 'sometimes';
+
         return [
             'nama' => [$wajib, 'string', 'min:3', 'max:80'],
             'kota' => [$wajib, 'string', 'min:2', 'max:60'],

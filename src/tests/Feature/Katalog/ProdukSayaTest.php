@@ -10,7 +10,7 @@ beforeEach(function () {
     $this->sri = Pengguna::factory()->create();
     $this->tokoSri = Toko::factory()->for($this->sri, 'pemilik')->create();
     $this->batik = Kategori::factory()->create();
-    $this->dataProduk = fn(array $timpa = []) => array_merge([
+    $this->dataProduk = fn (array $timpa = []) => array_merge([
         'nama' => 'Kain Batik Cap Sogan',
         'kategori_id' => $this->batik->id,
         'harga_rupiah' => 185_000,

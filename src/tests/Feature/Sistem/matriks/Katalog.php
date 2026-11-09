@@ -1,4 +1,5 @@
 <?php
+
 /*
 | Matriks otorisasi domain D2 Toko dan Katalog.
 | Kunci: "METODE alamat". Nilai: daftar peran yang boleh, atau '*' untuk siapa pun yang sudah masuk.

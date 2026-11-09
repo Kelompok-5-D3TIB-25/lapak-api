@@ -14,6 +14,7 @@ final class KredensialSalah extends GalatDomain
     {
         return new self('KREDENSIAL_SALAH', 'Surel atau kata sandi salah.', 401);
     }
+
     public static function saatKonfirmasi(): self
     {
         return new self('KREDENSIAL_SALAH', 'Kata sandi salah.', 422);

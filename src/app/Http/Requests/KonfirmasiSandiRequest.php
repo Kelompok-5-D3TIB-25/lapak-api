@@ -12,6 +12,7 @@ final class KonfirmasiSandiRequest extends FormRequest
     {
         return true;
     }
+
     public function rules(): array
     {
         return ['kata_sandi' => ['required', 'string', 'max:72']];

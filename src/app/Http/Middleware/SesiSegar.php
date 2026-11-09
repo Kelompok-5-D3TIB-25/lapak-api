@@ -22,6 +22,7 @@ final class SesiSegar
         if (! Sesi::dariPermintaan($request)->segar()) {
             throw new SesiTidakSegar;
         }
+
         return $next($request);
     }
 }

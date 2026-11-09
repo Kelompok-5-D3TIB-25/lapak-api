@@ -9,5 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 final class Izin extends Model
 {
     protected $table = 'izin';
+
     protected $fillable = ['nama', 'keterangan'];
 }
