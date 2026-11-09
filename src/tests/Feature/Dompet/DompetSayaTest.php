@@ -3,10 +3,13 @@
 use App\Domain\Uang;
 use App\Enums\JenisDompet;
 use App\Enums\JenisMutasi;
+use App\Enums\NamaPeran;
 use App\Models\Dompet;
 use App\Models\MutasiSaldo;
 use App\Models\Pengguna;
+use App\Models\Peran;
 use App\Services\BukuBesar;
+use App\Services\PengelolaPeran;
 
 /** Mengisi saldo seorang penjual lewat jalur resmi: dana masuk escrow, lalu dilepas. */
 function lepasDanaKe(Pengguna $penjual, int $rupiah, string $rujukan): void
@@ -18,11 +21,13 @@ function lepasDanaKe(Pengguna $penjual, int $rupiah, string $rujukan): void
     $buku->pindahkan($luar, $escrow, $jumlah, JenisMutasi::DanaMasuk, $rujukan);
     $buku->pindahkan($escrow, $buku->dompetPenjual($penjual), $jumlah, JenisMutasi::LepasDana, $rujukan);
 }
+
 it('menolak permintaan tanpa kunci sesi', function () {
     $this->getJson('/api/v1/dompet')->assertUnauthorized();
 });
-it('menampilkan saldo nol tanpa membuat dompet bagi pengguna tanpa transaksi', function () {
-    $this->sebagai(Pengguna::factory()->create())->getJson('/api/v1/dompet')
+
+it('menampilkan saldo nol tanpa membuat dompet bagi penjual tanpa transaksi', function () {
+    $this->sebagai(Pengguna::factory()->penjual()->create())->getJson('/api/v1/dompet')
         ->assertOk()
         ->assertExactJson(['sukses' => true, 'meta' => null, 'data' => [
             'saldo' => ['rupiah' => 0, 'tampilan' => 'Rp 0'],
@@ -30,9 +35,10 @@ it('menampilkan saldo nol tanpa membuat dompet bagi pengguna tanpa transaksi', f
         ]]);
     expect(Dompet::count())->toBe(0);
 });
+
 it('menampilkan saldo milik sendiri dan bukan milik orang lain', function () {
-    $sri = Pengguna::factory()->create();
-    $wulan = Pengguna::factory()->create();
+    $sri = Pengguna::factory()->penjual()->create();
+    $wulan = Pengguna::factory()->penjual()->create();
     lepasDanaKe($sri, 363_500, 'LPK-UJI-1001');
     lepasDanaKe($wulan, 97_500, 'LPK-UJI-1002');
     $this->sebagai($sri)->getJson('/api/v1/dompet')
@@ -42,16 +48,18 @@ it('menampilkan saldo milik sendiri dan bukan milik orang lain', function () {
     $this->sebagai($wulan)->getJson('/api/v1/dompet')
         ->assertJsonPath('data.saldo.rupiah', 97_500);
 });
+
 it('membuka saldo tanpa sesi segar tetapi menuntutnya untuk riwayat mutasi (LP-15)', function () {
-    $sri = Pengguna::factory()->create();
+    $sri = Pengguna::factory()->penjual()->create();
     lepasDanaKe($sri, 363_500, 'LPK-UJI-1003');
     $this->sebagai($sri, segar: false)->getJson('/api/v1/dompet')->assertOk();
     $this->getJson('/api/v1/dompet/mutasi')
         ->assertForbidden()
         ->assertJsonPath('galat.kode', 'LP-15');
 });
+
 it('membuka riwayat setelah kata sandi dikonfirmasi, dengan kunci yang baru', function () {
-    $sri = Pengguna::factory()->create(['kata_sandi' => 'BatikSolo2026']);
+    $sri = Pengguna::factory()->penjual()->create(['kata_sandi' => 'BatikSolo2026']);
     lepasDanaKe($sri, 363_500, 'LPK-UJI-1004');
     $kunciBaru = $this->sebagai($sri, segar: false)
         ->postJson('/api/v1/sesi/konfirmasi', ['kata_sandi' => 'BatikSolo2026'])
@@ -67,9 +75,10 @@ it('membuka riwayat setelah kata sandi dikonfirmasi, dengan kunci yang baru', fu
         ->assertJsonPath('data.0.saldo_setelah', 363_500)
         ->assertJsonMissingPath('data.0.kelompok');
 });
+
 it('menampilkan hanya mutasi dompet sendiri, terbaru lebih dulu', function () {
-    $sri = Pengguna::factory()->create();
-    $wulan = Pengguna::factory()->create();
+    $sri = Pengguna::factory()->penjual()->create();
+    $wulan = Pengguna::factory()->penjual()->create();
     lepasDanaKe($sri, 100_000, 'LPK-UJI-1005');
     lepasDanaKe($wulan, 55_000, 'LPK-UJI-1006');
     lepasDanaKe($sri, 250_000, 'LPK-UJI-1007');
@@ -79,15 +88,39 @@ it('menampilkan hanya mutasi dompet sendiri, terbaru lebih dulu', function () {
         ->assertJsonPath('data.0.rujukan', 'LPK-UJI-1007')
         ->assertJsonPath('data.0.saldo_setelah', 350_000)
         ->assertJsonPath('data.1.rujukan', 'LPK-UJI-1005');
-    $this->sebagai(Pengguna::factory()->create())->getJson('/api/v1/dompet/mutasi')
+    $this->sebagai(Pengguna::factory()->penjual()->create())->getJson('/api/v1/dompet/mutasi')
         ->assertOk()
         ->assertJsonPath('meta.total', 0);
 });
+
+it('menutup pintu dompet bagi yang tidak memegang izin dompet.lihat', function (string $pemegang) {
+    $this->sebagai(Pengguna::factory()->{$pemegang}()->create());
+
+    $this->getJson('/api/v1/dompet')
+        ->assertForbidden()
+        ->assertJsonPath('galat.kode', 'DITOLAK');
+    $this->getJson('/api/v1/dompet/mutasi')->assertForbidden();
+})->with(['pembeli', 'admin', 'keuangan', 'auditor']);
+
+it('menutup dompet begitu peran penjual dicabut', function () {
+    $sri = Pengguna::factory()->penjual()->create();
+    $this->sebagai($sri)->getJson('/api/v1/dompet')->assertOk();
+
+    app(PengelolaPeran::class)->cabut($sri, NamaPeran::Penjual);
+
+    // Kunci lama mati bersama perannya. Setelah masuk ulang pun pintu dompet tertutup.
+    $this->getJson('/api/v1/dompet')->assertUnauthorized();
+    $this->sebagai($sri)->getJson('/api/v1/dompet')->assertForbidden();
+});
+
 it('menjalankan seeder contoh berulang kali tanpa menggandakan mutasi', function () {
     $this->seed();
     $this->seed();
     expect(MutasiSaldo::where('rujukan', 'LPK-CONTOH-0001')->count())->toBe(6);
     $this->artisan('lapak:periksa-buku')->assertSuccessful();
+
+    // Saldo dibaca langsung dari buku besar. Uji seeder tidak perlu bergantung pada peran yang
+    // diberikan seeder domain lain kepada akun contoh.
     $sri = Pengguna::where('surel', 'sri@lapak.test')->sole();
-    $this->sebagai($sri)->getJson('/api/v1/dompet')->assertJsonPath('data.saldo.rupiah', 363_500);
+    expect(app(BukuBesar::class)->cariDompetPenjual($sri)?->saldo_rupiah)->toBe(363_500);
 });
