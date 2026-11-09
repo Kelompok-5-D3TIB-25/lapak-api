@@ -21,6 +21,7 @@ final class MasukController extends Controller
         private readonly PemeriksaKataSandi $sandi,
         private readonly PenerbitSesi $penerbit,
     ) {}
+
     public function __invoke(MasukRequest $request): JsonResponse
     {
         $pengguna = Pengguna::query()->where('surel', $request->validated('surel'))->first();
@@ -38,6 +39,7 @@ final class MasukController extends Controller
             $request->ip(),
             $request->userAgent(),
         );
+
         return $this->sukses([
             // Satu-satunya saat kunci utuh keluar dari server. Klien wajib menyimpannya sekarang.
             'kunci' => $kunci,

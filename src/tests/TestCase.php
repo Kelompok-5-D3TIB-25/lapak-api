@@ -18,9 +18,9 @@ abstract class TestCase extends BaseTestCase
 
     protected $seeder = PeranIzinSeeder::class;
 
-
     /** Sesi yang diterbitkan pemanggilan sebagai() terakhir. */
     protected ?Sesi $sesiUji = null;
+
     /*
  * Masuk sebagai seorang pengguna dengan kunci sesi SUNGGUHAN.
  *  * Uji tidak memakai jalan pintas actingAs: setiap permintaan melewati guard yang sama
@@ -32,16 +32,20 @@ abstract class TestCase extends BaseTestCase
         if (! $segar) {
             $this->sesiUji->forceFill(['dikonfirmasi_pada' => now()->subHour()])->save();
         }
+
         return $this->denganKunci($kunci);
     }
+
     protected function denganKunci(string $kunci): static
     {
-        return $this->withHeader('Authorization', 'Bearer ' . $kunci);
+        return $this->withHeader('Authorization', 'Bearer '.$kunci);
     }
+
     protected function tanpaKunci(): static
     {
         return $this->withoutHeader('Authorization');
     }
+
     /**
      * Di produksi setiap permintaan memulai aplikasi baru. Di dalam uji, satu aplikasi melayani
      * seluruh permintaan sebuah uji, dan guard mengingat pengguna dari permintaan sebelumnya.
@@ -57,6 +61,7 @@ abstract class TestCase extends BaseTestCase
         $content = null,
     ) {
         $this->app['auth']->forgetGuards();
+
         return parent::call($method, $uri, $parameters, $cookies, $files, $server, $content);
     }
 }

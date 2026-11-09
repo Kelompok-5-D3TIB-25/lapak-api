@@ -9,7 +9,7 @@ beforeEach(function () {
         'surel' => 'sri@lapak.test',
         'kata_sandi' => 'BatikSolo2026',
     ]);
-    $this->masuk = fn(array $timpa = []) => $this->postJson('/api/v1/masuk', array_merge([
+    $this->masuk = fn (array $timpa = []) => $this->postJson('/api/v1/masuk', array_merge([
         'surel' => 'sri@lapak.test',
         'kata_sandi' => 'BatikSolo2026',
         'nama_perangkat' => 'Laptop Sri',

@@ -18,6 +18,7 @@ final class PemeriksaIzin
     {
         return in_array($izin->value, $this->daftar($pengguna), true);
     }
+
     /**
      * @return list<string> nama izin, urut abjad, tanpa kembaran
      */
@@ -32,6 +33,7 @@ final class PemeriksaIzin
             ->pluck('izin.nama')
             ->all();
     }
+
     /**
      * Dipanggil setiap kali peran seorang pengguna berubah.
      * Belum melakukan apa pun karena belum ada yang diingat; titik kait ini disepakati sejak kontrak

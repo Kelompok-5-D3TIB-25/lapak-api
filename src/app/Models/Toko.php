@@ -45,7 +45,7 @@ final class Toko extends Model
      * Toko milik seorang pengguna. Seluruh pintu "toko saya" berangkat dari scope ini,
      * sehingga pengenal toko tidak pernah diambil dari masukan klien.
      *
-     * @param Builder<Toko> $kueri
+     * @param  Builder<Toko>  $kueri
      */
     public function scopeMilik(Builder $kueri, Pengguna $pengguna): void
     {
