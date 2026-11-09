@@ -1,6 +1,6 @@
 # Aturan Bisnis Lapak
 
-Kolom "Ditegakkan di" hanya diisi integrator pada penutup sesi.
+Kolom "Ditegakkan di" hanya diisi integrator pada penutup sesi. 
 
 | Kode | Aturan | Ditegakkan di |
 |---|---|---|
