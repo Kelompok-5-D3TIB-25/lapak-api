@@ -31,6 +31,7 @@ final class TokoSayaResource extends JsonResource
             ],
             'status' => $this->status->value,
             'terlihat_publik' => $this->status === StatusToko::Aktif,
+            'catatan_moderasi' => $this->catatan_moderasi,
             'jumlah_produk' => $this->whenCounted('produk'),
         ];
     }
