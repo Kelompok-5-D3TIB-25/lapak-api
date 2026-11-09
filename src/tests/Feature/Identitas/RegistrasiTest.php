@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\NamaIzin;
 use App\Enums\StatusAkun;
 use App\Models\Pengguna;
 use Illuminate\Support\Facades\Hash;
