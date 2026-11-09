@@ -28,7 +28,7 @@ Marketplace UMKM Solo Raya — Praktik Pemrograman Back End, D3 Teknik Informati
 |---|---|---|
 | 1 | @Rokkett2500 | `sesi-1` |
 | 2 | @ihsanpradipta45-alt | `sesi-2` |
-| 3 | @victor-isMe | `sesi-3` |
+| 3 | @victor-isMe | `sesi-3` (+ `sesi-3-1`) |
 | 4 | @nabelazahra-ptr26 | `sesi-4` |
 | 5 | @mrdaknsh | `v1.0.0` |
 
