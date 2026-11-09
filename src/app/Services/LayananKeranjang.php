@@ -14,6 +14,7 @@ use App\Models\Pengguna;
 final class LayananKeranjang
 {
     public function __construct(private readonly PenyusunBelanja $penyusun) {}
+
     /**
      * Keranjang tidak menyimpan harga. Setiap kali dibuka, harga dan stok dibaca ulang
      * dari tabel produk, sehingga angka yang tampil selalu angka hari ini (LP-6).
@@ -28,11 +29,13 @@ final class LayananKeranjang
         }
         $butir = $keranjang->butir
             ->sortBy('id')
-            ->map(fn(ButirKeranjang $b) => ['produk_id' => $b->produk_id, 'kuantitas' => $b->kuantitas])
+            ->map(fn (ButirKeranjang $b) => ['produk_id' => $b->produk_id, 'kuantitas' => $b->kuantitas])
             ->values()
             ->all();
+
         return $this->penyusun->pilah($butir, $pengguna);
     }
+
     /**
      * Menetapkan kuantitas sebuah produk MENJADI angka tertentu, bukan menambahkannya.
      * Permintaan yang sama dikirim dua kali menghasilkan keranjang yang sama.
@@ -48,15 +51,18 @@ final class LayananKeranjang
         }
         $keranjang->butir()->updateOrCreate(['produk_id' => $produkId], ['kuantitas' => $kuantitas]);
     }
+
     /** Menghapus butir yang tidak ada bukan galat: hasil akhirnya sama, butir itu tidak ada. */
     public function hapusButir(Pengguna $pengguna, int $produkId): void
     {
         $this->milik($pengguna)->butir()->where('produk_id', $produkId)->delete();
     }
+
     public function kosongkan(Pengguna $pengguna): void
     {
         $this->milik($pengguna)->butir()->delete();
     }
+
     /** Keranjang SELALU dicari lewat pengguna sesi. Tidak ada jalan menuju keranjang lewat id. */
     private function milik(Pengguna $pengguna): Keranjang
     {
@@ -66,6 +72,7 @@ final class LayananKeranjang
             $keranjang->pengguna_id = $pengguna->id;
             $keranjang->save();
         }
+
         return $keranjang;
     }
 }

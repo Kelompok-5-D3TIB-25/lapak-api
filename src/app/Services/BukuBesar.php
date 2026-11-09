@@ -45,8 +45,6 @@ final class BukuBesar
 
     /**
      * Riwayat mutasi seorang penjual, terbaru lebih dulu. Kosong bila ia belum memiliki dompet.
-     *
-     * @return Builder
      */
     public function mutasiPenjual(Pengguna $penjual): Builder
     {
@@ -93,7 +91,7 @@ final class BukuBesar
                 ->keyBy('id');
             $asal = $terkunci[$dari->id];
             $tujuan = $terkunci[$ke->id];
-            
+
             // Saldo dibaca SETELAH kunci didapat. Membacanya sebelum kunci berarti memutuskan
             // berdasarkan angka yang mungkin sudah basi.
             if (! $asal->jenis->bolehNegatif() && $asal->saldo_rupiah < $jumlah->rupiah) {
