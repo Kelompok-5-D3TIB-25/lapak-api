@@ -1,13 +1,14 @@
 <?php
 
 use App\Enums\StatusProduk;
+use App\Enums\StatusToko;
 use App\Models\Kategori;
 use App\Models\Pengguna;
 use App\Models\Produk;
 use App\Models\Toko;
 
 beforeEach(function () {
-    $this->sri = Pengguna::factory()->create();
+    $this->sri = Pengguna::factory()->penjual()->create();
     $this->tokoSri = Toko::factory()->for($this->sri, 'pemilik')->create();
     $this->batik = Kategori::factory()->create();
     $this->dataProduk = fn (array $timpa = []) => array_merge([
@@ -18,11 +19,33 @@ beforeEach(function () {
         'berat_gram' => 400,
     ], $timpa);
 });
-it('menjawab 404 bagi pengguna yang belum membuka toko', function () {
-    $this->sebagai(Pengguna::factory()->create())
+
+it('menolak pemilik toko yang belum disetujui: ia belum menjadi penjual', function () {
+    $tini = Pengguna::factory()->pembeli()->create();
+    Toko::factory()->menunggu()->for($tini, 'pemilik')->create();
+
+    $this->sebagai($tini)
         ->postJson('/api/v1/toko-saya/produk', ($this->dataProduk)())
-        ->assertNotFound();
+        ->assertForbidden()
+        ->assertJsonPath('galat.kode', 'DITOLAK');
+    $this->getJson('/api/v1/toko-saya/produk')->assertForbidden();
+
+    expect(Produk::count())->toBe(0);
 });
+
+it('tetap membolehkan penjual mengelola produk selagi tokonya ditangguhkan', function () {
+    $this->tokoSri->forceFill(['status' => StatusToko::Ditangguhkan])->save();
+
+    $id = $this->sebagai($this->sri)
+        ->postJson('/api/v1/toko-saya/produk', ($this->dataProduk)(['status' => 'aktif']))
+        ->assertCreated()
+        ->json('data.id');
+
+    // Boleh dikelola, tetapi tidak tampil: yang menutupnya status toko, bukan izin (LP-4).
+    expect(Produk::find($id))->not->toBeNull();
+    $this->tanpaKunci()->getJson('/api/v1/produk')->assertJsonCount(0, 'data');
+});
+
 it('menyimpan produk sebagai draf di toko milik pengguna sesi', function () {
     $tokoLain = Toko::factory()->create();
     $this->sebagai($this->sri)
@@ -34,6 +57,7 @@ it('menyimpan produk sebagai draf di toko milik pengguna sesi', function () {
     // Draf tidak tampil di katalog publik (LP-4).
     $this->tanpaKunci()->getJson('/api/v1/produk')->assertJsonCount(0, 'data');
 });
+
 it('menerbitkan produk lewat perubahan status', function () {
     $produk = Produk::factory()->for($this->tokoSri)->draf()->create();
     $this->sebagai($this->sri)
@@ -42,6 +66,7 @@ it('menerbitkan produk lewat perubahan status', function () {
         ->assertJsonPath('data.status', 'aktif');
     $this->tanpaKunci()->getJson('/api/v1/produk')->assertJsonPath('data.0.id', $produk->id);
 });
+
 it('menolak harga yang bukan bilangan bulat rupiah (LP-1)', function (mixed $harga) {
     $this->sebagai($this->sri)
         ->postJson('/api/v1/toko-saya/produk', ($this->dataProduk)(['harga_rupiah' => $harga]))
@@ -54,12 +79,14 @@ it('menolak harga yang bukan bilangan bulat rupiah (LP-1)', function (mixed $har
     'negatif' => [-185_000],
     'melampaui batas' => [1_000_000_001],
 ]);
+
 it('menolak status di luar tiga pilihan', function () {
     $produk = Produk::factory()->for($this->tokoSri)->create();
     $this->sebagai($this->sri)
         ->patchJson("/api/v1/toko-saya/produk/{$produk->id}", ['status' => 'unggulan'])
         ->assertUnprocessable();
 });
+
 it('menjawab 404 untuk produk toko lain dan tidak mengubahnya', function () {
     $milikLain = Produk::factory()->create(['nama' => 'Produk Orang Lain', 'harga_rupiah' => 50_000]);
     $this->sebagai($this->sri)
@@ -71,6 +98,7 @@ it('menjawab 404 untuk produk toko lain dan tidak mengubahnya', function () {
         ->harga_rupiah->toBe(50_000)
         ->status->toBe(StatusProduk::Aktif);
 });
+
 it('mengarsipkan, bukan menghapus', function () {
     $produk = Produk::factory()->for($this->tokoSri)->create();
     $this->sebagai($this->sri)
@@ -80,6 +108,7 @@ it('mengarsipkan, bukan menghapus', function () {
     expect(Produk::whereKey($produk->id)->exists())->toBeTrue();
     $this->tanpaKunci()->getJson("/api/v1/produk/{$produk->slug}")->assertNotFound();
 });
+
 it('mendaftar seluruh produk sendiri, termasuk draf dan arsip, tanpa produk toko lain', function () {
     Produk::factory()->for($this->tokoSri)->create();
     Produk::factory()->for($this->tokoSri)->draf()->create();
