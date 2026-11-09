@@ -3,11 +3,13 @@
 use App\Domain\Uang;
 use App\Enums\JenisDompet;
 use App\Enums\JenisMutasi;
+use App\Enums\NamaPeran;
 use App\Models\Dompet;
 use App\Models\MutasiSaldo;
 use App\Models\Pengguna;
 use App\Models\Peran;
 use App\Services\BukuBesar;
+use App\Services\PengelolaPeran;
 
 /** Mengisi saldo seorang penjual lewat jalur resmi: dana masuk escrow, lalu dilepas. */
 function lepasDanaKe(Pengguna $penjual, int $rupiah, string $rujukan): void
@@ -104,9 +106,11 @@ it('menutup dompet begitu peran penjual dicabut', function () {
     $sri = Pengguna::factory()->penjual()->create();
     $this->sebagai($sri)->getJson('/api/v1/dompet')->assertOk();
 
-    $sri->peran()->detach(Peran::query()->where('nama', 'penjual')->value('id'));
+    app(PengelolaPeran::class)->cabut($sri, NamaPeran::Penjual);
 
-    $this->getJson('/api/v1/dompet')->assertForbidden();
+    // Kunci lama mati bersama perannya. Setelah masuk ulang pun pintu dompet tertutup.
+    $this->getJson('/api/v1/dompet')->assertUnauthorized();
+    $this->sebagai($sri)->getJson('/api/v1/dompet')->assertForbidden();
 });
 
 it('menjalankan seeder contoh berulang kali tanpa menggandakan mutasi', function () {
