@@ -57,3 +57,26 @@ it('menolak konfirmasi kata sandi yang tidak cocok', function () {
         ->assertUnprocessable()
         ->assertJsonPath('galat.rincian.konfirmasi_kata_sandi.0', 'Konfirmasi kata sandi tidak cocok.');
 });
+it('memberi peran pembeli kepada setiap pendaftar, dan hanya itu', function () {
+    $this->postJson('/api/v1/registrasi', dataRegistrasi())
+        ->assertCreated()
+        ->assertJsonPath('data.peran', ['pembeli']);
+    $dewi = Pengguna::sole();
+    expect($dewi->punyaIzin(NamaIzin::KeranjangKelola))->toBeTrue()
+        ->and($dewi->punyaIzin(NamaIzin::ProdukKelola))->toBeFalse();
+});
+it('mengabaikan peran yang diselipkan klien saat mendaftar', function (mixed $peran) {
+    $this->postJson('/api/v1/registrasi', dataRegistrasi(['peran' => $peran]))
+        ->assertCreated()
+        ->assertJsonPath('data.peran', ['pembeli']);
+})->with([
+    'teks' => ['admin'],
+    'larik' => [['admin', 'keuangan']],
+]);
+it('tidak meninggalkan akun tanpa peran bila pemberian peran gagal', function () {
+    DB::table('peran')->delete(); // meniru server yang dimigrasi tanpa PeranIzinSeeder
+    $this->postJson('/api/v1/registrasi', dataRegistrasi())
+        ->assertStatus(500)
+        ->assertJsonPath('galat.kode', 'GALAT_SERVER');
+    expect(Pengguna::count())->toBe(0);
+});
