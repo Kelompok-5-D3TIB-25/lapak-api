@@ -24,7 +24,7 @@ Dengan pola ini urutan migrasi mengikuti urutan domain, bukan siapa yang lebih d
 | D3 | `butir_keranjang` | (satu migration dengan `keranjang`) |
 | D4 | `dompet` | `2026_10_01_400001_buat_tabel_dompet.php` |
 | D4 | `mutasi_saldo` | `2026_10_01_400002_buat_tabel_mutasi_saldo.php` |
-| D5 | `peran`, `izin`, `log_audit` | Sesi 3 |
+| D5 | `peran`, `izin` (`log_audit` — Sesi 5) | Sesi 3 |
 
 ## Arah foreign key
 
@@ -130,6 +130,17 @@ Index tambahan: `['status', 'kategori_id']`, `harga_rupiah`.
 | `rujukan` | string(60) | |
 | `keterangan` | string(160) | nullable |
 | `created_at` | timestamp | tanpa `updated_at` (append-only) |
+
+### `peran` dan `izin` (D5, Sesi 3)
+
+| Kolom | Tipe | Catatan |
+|---|---|---|
+| `peran.id` | bigint PK | |
+| `peran.nama` | string(20) | unik, enum `NamaPeran` |
+| `izin.id` | bigint PK | |
+| `izin.nama` | string(40) | unik, enum `NamaIzin` |
+| `izin_peran` | bigint PK + FK | tabel pivot peran–izin |
+| `pengguna_peran` | bigint PK + FK | tabel pivot pengguna–peran |
 
 ## Aturan skema
 
