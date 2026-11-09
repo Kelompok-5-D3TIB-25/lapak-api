@@ -7,6 +7,11 @@
 /src/app/Http/Controllers/RegistrasiController.php  @ihsanpradipta45-alt
 /src/app/Http/Controllers/MasukController.php       @ihsanpradipta45-alt
 /src/app/Http/Controllers/SesiController.php        @ihsanpradipta45-alt
+/src/app/Services/PengelolaPeran.php              @ihsanpradipta45-alt
+/src/app/Http/Controllers/PeranPenggunaController.php @ihsanpradipta45-alt
+/src/app/Policies/PenggunaPolicy.php              @ihsanpradipta45-alt
+/src/app/Console/Commands/BeriPeran.php           @ihsanpradipta45-alt
+/src/database/factories/PenggunaFactory.php       @ihsanpradipta45-alt
 /src/app/Services/PenerbitSesi.php                  @ihsanpradipta45-alt
 /src/app/Services/PemeriksaSesi.php                 @ihsanpradipta45-alt
 /src/app/Services/PemeriksaKataSandi.php            @ihsanpradipta45-alt
@@ -23,6 +28,9 @@
 /src/app/Http/Controllers/ProdukSayaController.php  @victor-isMe
 /src/routes/api/katalog.php                         @victor-isMe
 /src/tests/Feature/Katalog/                         @victor-isMe
+/src/app/Services/ModerasiToko.php                @victor-isMe
+/src/app/Http/Controllers/ModerasiTokoController.php @victor-isMe
+/src/app/Policies/TokoPolicy.php                  @victor-isMe
 
 # D3 Keranjang dan Pesanan
 /src/app/Models/Keranjang.php                       @nabelazahra-ptr26
@@ -33,6 +41,7 @@
 /src/routes/api/belanja.php                         @nabelazahra-ptr26
 /src/tests/Feature/Belanja/                         @nabelazahra-ptr26
 /src/app/Domain/Belanja/                            @nabelazahra-ptr26
+/src/app/Http/Controllers/BukuBesarController.php @nabelazahra-ptr26
 
 # D4 Pembayaran dan Saldo
 /src/app/Domain/Uang.php                            @mrdaknsh
@@ -61,6 +70,13 @@
 /src/tests/TestCase.php                             @Rokkett2500
 /src/tests/Pest.php                                 @Rokkett2500
 /src/tests/Feature/Sistem/                          @Rokkett2500
+/src/app/Enums/NamaPeran.php                         @Rokkett2500
+/src/app/Enums/NamaIzin.php                          @Rokkett2500
+/src/app/Models/Peran.php                            @Rokkett2500
+/src/app/Models/Izin.php                             @Rokkett2500
+/src/app/Services/PemeriksaIzin.php                  @Rokkett2500
+/src/app/Console/Commands/MatriksIzin.php            @Rokkett2500
+/src/database/seeders/PeranIzinSeeder.php            @Rokkett2500
 
 # Migration dan seeder: pemiliknya ditentukan digit domain pada nama berkas
 /src/database/migrations/*_1000*.php                @ihsanpradipta45-alt
