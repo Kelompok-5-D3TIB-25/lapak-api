@@ -1,6 +1,7 @@
 <?php
 
 use App\Exceptions\PenanganGalatApi;
+use App\Http\Middleware\Idempoten;
 use App\Http\Middleware\IdPermintaan;
 use App\Http\Middleware\PaksaJson;
 use App\Http\Middleware\PeriksaIzin;
@@ -13,15 +14,18 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        api: __DIR__.'/../routes/api.php',
-        commands: __DIR__.'/../routes/console.php',
+        web: __DIR__ . '/../routes/web.php',
+        api: __DIR__ . '/../routes/api.php',
+        commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->api(prepend: [PaksaJson::class, IdPermintaan::class, TanpaCache::class]);
-        $middleware->alias(['sesi.segar' => SesiSegar::class, 'izin' => PeriksaIzin::class]);
-        // Izin diperiksa SEBELUM kerangka mencari objek dari alamat. Tanpa baris ini, orang yang
+        $middleware->alias([
+            'sesi.segar' => SesiSegar::class,
+            'izin' => PeriksaIzin::class,
+            'idempoten' => Idempoten::class,
+        ]); // Izin diperiksa SEBELUM kerangka mencari objek dari alamat. Tanpa baris ini, orang yang
         // tidak berwenang menerima 404 untuk nomor yang tidak ada dan 403 untuk nomor yang ada,
         // sehingga ia dapat memetakan isi basis data dari perbedaan kedua jawaban itu.
         $middleware->prependToPriorityList(
