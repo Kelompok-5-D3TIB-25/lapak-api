@@ -146,4 +146,4 @@ Index tambahan: `['status', 'kategori_id']`, `harga_rupiah`.
 
 - Semua nilai uang adalah bilangan bulat: `bigInteger`/`unsignedBigInteger` dengan akhiran `_rupiah`. Tidak ada `decimal`, `float`, atau `double` (LP-1).
 - Status disimpan sebagai string(20) dan dipetakan ke enum PHP.
-- `mutasi_saldo` tidak boleh diubah atau dihapus (LP-13).
+- `mutasi_saldo` tidak boleh diubah atau dihapus (LP-13). 
