@@ -18,6 +18,10 @@
 /src/routes/api/identitas.php                       @ihsanpradipta45-alt
 /src/tests/Feature/Identitas/                       @ihsanpradipta45-alt
 /src/config/auth.php                                @ihsanpradipta45-alt
+/src/app/Models/Alamat.php                          @ihsanpradipta45-alt
+/src/app/Services/BukuAlamat.php                    @ihsanpradipta45-alt
+/src/app/Services/PenjagaTransaksi.php              @ihsanpradipta45-alt
+/src/app/Http/Controllers/AlamatController.php      @ihsanpradipta45-alt
 
 # D2 Toko dan Katalog
 /src/app/Models/Toko.php                            @victor-isMe
@@ -31,6 +35,7 @@
 /src/app/Services/ModerasiToko.php                @victor-isMe
 /src/app/Http/Controllers/ModerasiTokoController.php @victor-isMe
 /src/app/Policies/TokoPolicy.php                  @victor-isMe
+/src/app/Services/PenjagaStok.php                   @victor-isMe
 
 # D3 Keranjang dan Pesanan
 /src/app/Models/Keranjang.php                       @nabelazahra-ptr26
@@ -42,6 +47,12 @@
 /src/tests/Feature/Belanja/                         @nabelazahra-ptr26
 /src/app/Domain/Belanja/                            @nabelazahra-ptr26
 /src/app/Http/Controllers/BukuBesarController.php @nabelazahra-ptr26
+/src/app/Models/Pembayaran.php                    @nabelazahra-ptr26
+/src/app/Services/LayananPembayaran.php           @nabelazahra-ptr26
+/src/app/Services/TandaTanganGateway.php          @nabelazahra-ptr26
+/src/app/Http/Controllers/WebhookPembayaranController.php @nabelazahra-ptr26
+/src/app/Http/Controllers/PembayaranSayaController.php @nabelazahra-ptr26
+/src/app/Console/Commands/SimulasiBayar.php       @nabelazahra-ptr26
 
 # D4 Pembayaran dan Saldo
 /src/app/Domain/Uang.php                            @mrdaknsh
@@ -52,6 +63,16 @@
 /src/routes/api/dompet.php                          @mrdaknsh
 /src/app/Console/Commands/PeriksaBuku.php           @mrdaknsh
 /src/tests/Feature/Dompet/                          @mrdaknsh
+/src/app/Models/Checkout.php                      @mrdaknsh
+/src/app/Models/Pesanan.php                       @mrdaknsh
+/src/app/Models/ButirPesanan.php                  @mrdaknsh
+/src/app/Services/GembokCheckout.php              @mrdaknsh
+/src/app/Services/MesinStatusPesanan.php          @mrdaknsh
+/src/app/Services/LayananCheckout.php             @mrdaknsh
+/src/app/Services/PembatalanOtomatis.php          @mrdaknsh
+/src/app/Http/Controllers/CheckoutController.php @mrdaknsh
+/src/app/Http/Controllers/PesananSayaController.php @mrdaknsh
+/src/app/Console/Commands/BatalkanKedaluwarsa.php @mrdaknsh
 
 # D5 Otorisasi, Audit, dan Kualitas, termasuk seluruh berkas bersama
 /src/app/Exceptions/                                @Rokkett2500
@@ -77,6 +98,10 @@
 /src/app/Services/PemeriksaIzin.php                  @Rokkett2500
 /src/app/Console/Commands/MatriksIzin.php            @Rokkett2500
 /src/database/seeders/PeranIzinSeeder.php            @Rokkett2500
+/src/app/Models/KunciIdempotensi.php              @Rokkett2500
+/src/app/Console/Commands/Balapan.php             @Rokkett2500
+/src/app/Console/Commands/BalapanAnak.php         @Rokkett2500
+/src/app/Balapan/                                 @Rokkett2500
 
 # Migration dan seeder: pemiliknya ditentukan digit domain pada nama berkas
 /src/database/migrations/*_1000*.php                @ihsanpradipta45-alt
@@ -88,3 +113,8 @@
 
 # Pengecualian: pada CODEOWNERS, pola yang cocok paling akhir yang menang.
 /src/app/Domain/Sesi/                               @ihsanpradipta45-alt
+/src/app/Balapan/AlamatPertama.php                @ihsanpradipta45-alt
+/src/app/Balapan/RebutanStok.php                  @victor-isMe
+/src/app/Balapan/PenyesuaianStok.php              @victor-isMe
+/src/app/Balapan/KeranjangGanda.php               @mrdaknsh
+/src/app/Balapan/WebhookGanda.php                 @nabelazahra-ptr26
