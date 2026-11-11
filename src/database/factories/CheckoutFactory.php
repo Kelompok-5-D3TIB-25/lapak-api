@@ -18,7 +18,7 @@ class CheckoutFactory extends Factory
     {
         return [
             'kode' => Str::ulid(),
-            'pembeli_id' => Pengguna::factory(),
+            'pembeli_id' => Pengguna::factory()->pembeli(),
             'total_rupiah' => fake()->numberBetween(50, 2_000) * 1_000,
             'pengenal_sesi' => Str::ulid(),
         ];
