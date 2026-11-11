@@ -19,5 +19,5 @@ Kolom "Ditegakkan" hanya diisi integrator pada penutup sesi.
 | LP-13 | Saldo hanya berubah lewat pemindahan antardompet yang tercatat sebagai sepasang mutasi berjumlah nol. Mutasi tidak diubah dan tidak dihapus. Hanya dompet eksternal yang boleh negatif. | `BukuBesar`, `MutasiSaldo::booted`, `lapak:periksa-buku` dengan lima invarian |
 | LP-14 | Kunci sesi ditampilkan satu kali dan disimpan sebagai hash. Sesi berlaku paling lama 7 hari. | `KunciSesi`, `PenerbitSesi`, `PemeriksaSesi`, `lapak:pangkas-sesi`, Sesi 2 |
 | LP-15 | Tindakan sensitif menuntut sesi segar: kata sandi dikonfirmasi ulang dalam 10 menit terakhir. | Sebagian: ditambah `PenjagaTransaksi` untuk checkout bernilai besar |
-| LP-16 | Pencairan saldo minimal Rp 50.000, disetujui peran keuangan, dan penyetuju tidak boleh orang yang sama dengan pengaju. | Belum — Sesi 4 |
+| LP-16 | Pencairan saldo minimal Rp 50.000, disetujui peran keuangan, dan penyetuju tidak boleh orang yang sama dengan pengaju. | Belum — Sesi 5 |
 | LP-17 | Setiap tindakan sensitif tercatat pada log audit yang hanya dapat ditambah dan berantai hash. | Belum — Sesi 5 |
