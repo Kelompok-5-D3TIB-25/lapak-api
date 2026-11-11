@@ -4,28 +4,28 @@
 
 | Tanggal | Bagian | Alat | Cara verifikasi |
 |---|---|---|---|
-| 2026-11-06 | Registrasi pengguna dan resource respons | Deepseek AI | `./vendor/bin/pest tests/Feature/Identitas`, tinjau diff |
+| 2026-11-06 | Registrasi pengguna dan resource respons | Claude | `./vendor/bin/pest tests/Feature/Identitas`, tinjau diff |
 
 ## Sesi 2
 
 | Tanggal | Bagian | Alat | Cara verifikasi |
 |---|---|---|---|
-| 2026-11-07 | Kontrak sesi: kunci sesi, penerbitan, pemeriksa kunci | Deepseek AI | `./vendor/bin/pest tests/Unit/KunciSesiTest.php` |
-| 2026-11-08 | Masuk/keluar/sesi/konfirmasi; `PenerbitSesi` | Deepseek AI | `./vendor/bin/pest tests/Feature/Identitas/SesiTest.php tests/Feature/Sistem/GuardSesiTest.php` |
+| 2026-11-07 | Kontrak sesi: kunci sesi, penerbitan, pemeriksa kunci | Gemini | `./vendor/bin/pest tests/Unit/KunciSesiTest.php` |
+| 2026-11-08 | Masuk/keluar/sesi/konfirmasi; `PenerbitSesi` | ChatGPT | `./vendor/bin/pest tests/Feature/Identitas/SesiTest.php tests/Feature/Sistem/GuardSesiTest.php` |
 
 ## Sesi 3
 
 | Tanggal | Bagian | Alat | Cara verifikasi |
 |---|---|---|---|
-| 2026-11-08 | `PengelolaPeran` + pencabutan sesi, state factory peran | Deepseek AI | `./vendor/bin/pest tests/Feature/Identitas`, tinjau diff |
-| 2026-11-09 | Pintu admin peran: `PeranPenggunaController`, `PenggunaPolicy` | Deepseek AI | `./vendor/bin/pest tests/Feature/Identitas/PeranPenggunaTest.php`, `php artisan route:list` |
+| 2026-11-08 | `PengelolaPeran` + pencabutan sesi, state factory peran | Claude | `./vendor/bin/pest tests/Feature/Identitas`, tinjau diff |
+| 2026-11-09 | Pintu admin peran: `PeranPenggunaController`, `PenggunaPolicy` | Gemini | `./vendor/bin/pest tests/Feature/Identitas/PeranPenggunaTest.php`, `php artisan route:list` |
 
 ## Sesi 4
 
 | Tanggal | Bagian | Alat | Cara verifikasi |
 |---|---|---|---|
-| 2026-11-09 | Tabel alamat, `Alamat` (`potret()`), `AlamatFactory` | Deepseek AI | `./vendor/bin/pest tests/Feature/Identitas/AlamatTest.php`, `php artisan migrate:fresh --seed` |
-| 2026-11-10 | `BukuAlamat` dengan kunci baris pengguna; `AlamatPertama` | Deepseek AI | `./vendor/bin/pest tests/Feature/Identitas`, `php artisan lapak:balapan alamat-pertama` |
+| 2026-11-09 | Tabel alamat, `Alamat` (`potret()`), `AlamatFactory` | ChatGPT | `./vendor/bin/pest tests/Feature/Identitas/AlamatTest.php`, `php artisan migrate:fresh --seed` |
+| 2026-11-10 | `BukuAlamat` dengan kunci baris pengguna; `AlamatPertama` | Gemini | `./vendor/bin/pest tests/Feature/Identitas`, `php artisan lapak:balapan alamat-pertama` |
 
 ## Catatan
 
