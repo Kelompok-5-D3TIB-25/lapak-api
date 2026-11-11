@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Alamat;
+use App\Models\Pengguna;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -15,6 +16,7 @@ class AlamatFactory extends Factory
     public function definition(): array
     {
         return [
+            'pengguna_id' => Pengguna::factory(),
             'label' => 'Rumah',
             'nama_penerima' => fake()->name(),
             'telepon' => '08'.fake()->numerify('##########'),
