@@ -3,6 +3,8 @@
 use App\Exceptions\ProdukTidakDapatDibeli;
 use App\Models\Produk;
 use App\Services\PenjagaStok;
+use Illuminate\Support\Facades\DB;
+use LogicException;
 
 beforeEach(function () {
     $this->penjaga = app(PenjagaStok::class);
@@ -38,4 +40,16 @@ it('menolak pembelian melebihi stok dengan 409 dan tidak mengubah apa pun', func
             ->and($galat->rincian)->toMatchArray(['diminta' => 6, 'tersedia' => 5]);
     }
     expect($this->kain->refresh()->stok)->toBe(5);
+});
+
+it('menolak dipanggil di luar transaksi, karena kuncinya tidak akan bertahan', function () {
+    // Setiap uji berjalan di dalam transaksi milik RefreshDatabase. Transaksi itu ditutup dulu
+    // untuk meniru pemanggil yang lupa membuka DB::transaction(), lalu dibuka kembali.
+    DB::rollBack();
+
+    try {
+        expect(fn () => $this->penjaga->ambil([$this->kain->id]))->toThrow(LogicException::class);
+    } finally {
+        DB::beginTransaction();
+    }
 });
