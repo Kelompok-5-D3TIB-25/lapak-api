@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Database\Factories\ButirPesananFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 final class ButirPesanan extends Model
 {
+    /** @use HasFactory<ButirPesananFactory> */
+    use HasFactory;
+
     protected $table = 'butir_pesanan';
 
     // LP-6: nama dan harga disalin dari produk pada saat checkout, bukan dibaca dari katalog.
