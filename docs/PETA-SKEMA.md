@@ -31,6 +31,7 @@ Dengan pola ini urutan migrasi mengikuti urutan domain, bukan siapa yang lebih d
 | D3 | `butir_pesanan` | `2026_10_04_300001_buat_tabel_checkout_dan_pesanan.php` |
 | D4 | `pembayaran` | `2026_10_04_400001_buat_tabel_pembayaran.php` |
 | D5 | `peran`, `izin` (`log_audit` — Sesi 5) | Sesi 3 |
+| D2 | kolom moderasi `dimoderasi_oleh`, `dimoderasi_pada`, `catatan_moderasi` pada `toko` | `2026_10_03_200001_tambah_moderasi_pada_toko.php` |
 | D5 | `kunci_idempotensi` | `2026_10_04_500001_buat_tabel_kunci_idempotensi.php` |
 
 ## Arah foreign key
@@ -48,7 +49,7 @@ produk (D2) <-- butir_pesanan (D3)
 toko (D2) <-- pesanan (D3)
 checkout (D3) <-- pembayaran (D4)
 pengguna (D1) <-- kunci_idempotensi (D5)
-pengguna (D1) <-- peran (D5) <-- izin_peran (D5) --> izin (D5)
+pengguna (D1) <-- peran (D5) <-- peran_izin (D5) --> izin (D5)
 pengguna (D1) <-- pengguna_peran (D5) --> peran (D5)
 ```
 
@@ -157,12 +158,12 @@ Index tambahan: `['status', 'kategori_id']`, `harga_rupiah`.
 |---|---|---|
 | `id` | bigint PK | |
 | `pengenal` | char(26) | unik, ULID |
-| `pengguna_id` | FK `pengguna.id` | restrict on delete |
-| `hash_kunci` | string(255) | hash; kunci utuh hanya tampil sekali saat login |
+| `pengguna_id` | FK `pengguna.id` | cascade on delete; index `['pengguna_id','dicabut_pada']` |
+| `hash_kunci` | char(64) | sha256; kunci utuh hanya tampil sekali saat login |
 | `nama_perangkat` | string(60) | |
 | `ip` | string(45) | nullable |
 | `agen_pengguna` | string(255) | nullable |
-| `dikonfirmasi_pada` | timestamp | dasar sesi segar (LP-15) |
+| `dikonfirmasi_pada` | timestamp | nullable; dasar sesi segar (LP-15) |
 | `terakhir_dipakai_pada` | timestamp | dasar pangkas sesi menganggur |
 | `kedaluwarsa_pada` | timestamp | batas mutlak 7 hari |
 | `dicabut_pada` | timestamp | nullable |
@@ -179,7 +180,7 @@ Index tambahan: `['status', 'kategori_id']`, `harga_rupiah`.
 | `telepon` | string(20) | |
 | `jalan` | string(200) | |
 | `kota` | string(60) | |
-| `kode_pos` | char(5) | |
+| `kode_pos` | string(5) | |
 | `utama` | boolean | tepat satu utama per pengguna (dijaga `BukuAlamat`) |
 | `created_at`, `updated_at` | timestamp | |
 
@@ -202,7 +203,7 @@ Index: `['pengguna_id', 'utama']`.
 |---|---|---|
 | `id` | bigint PK | |
 | `checkout_id` | FK `checkout.id` | restrict on delete |
-| `nomor` | string(24) | unik, LPK-YYYYMMDD-NNNNNN (LP-9) |
+| `nomor` | string(24) | unik, LPK-YYYYMMDD-NNNNNN (LP-9); nullable — diisi lewat `Pesanan::booted`; index `['pembeli_id','id']` |
 | `pembeli_id` | FK `pengguna.id` | restrict on delete |
 | `toko_id` | FK `toko.id` | restrict on delete |
 | `status` | string(20) | `menunggu_pembayaran`, `dibayar`, `dikemas`, `dikirim`, `selesai`, `dibatalkan`; index |
@@ -250,23 +251,22 @@ Tanpa `updated_at`/`created_at`; butir bersifat beku begitu disimpan.
 | `id` | bigint PK | |
 | `pengguna_id` | FK `pengguna.id` | cascade delete |
 | `kunci` | string(64) | unik per pengguna |
-| `kiat` | char(64) | sha256 atas rute + badan |
-| `metode` | string(10) | |
-| `alamat` | string(255) | |
-| `status_http` | unsignedSmallInteger | |
-| `isi` | JSON | respons yang disimpan |
-| `created_at`, `updated_at` | timestamp | hanya tujuh hari terakhir yang disimpan |
+| `rute` | string(120) | metode + path |
+| `sidik` | char(64) | sha256 atas rute + badan permintaan |
+| `kode_status` | unsignedSmallInteger | nullable |
+| `badan_respons` | longText | nullable |
+| `created_at` | timestamp | tidak di-update otomatis; belum ada pemangkas (Sesi 5) |
 
 ### `peran` dan `izin` (D5, Sesi 3)
 
 | Kolom | Tipe | Catatan |
 |---|---|---|
 | `peran.id` | bigint PK | |
-| `peran.nama` | string(20) | unik, enum `NamaPeran` |
+| `peran.nama` | string(30) | unik, enum `NamaPeran` |
 | `izin.id` | bigint PK | |
-| `izin.nama` | string(40) | unik, enum `NamaIzin` |
-| `izin_peran` | bigint PK + FK | tabel pivot peran–izin |
-| `pengguna_peran` | bigint PK + FK | tabel pivot pengguna–peran |
+| `izin.nama` | string(60) | unik, enum `NamaIzin` |
+| `peran_izin` | composite PK (`peran_id`,`izin_id`) | tanpa id surrogate; tabel pivot peran–izin |
+| `pengguna_peran` | composite PK (`pengguna_id`,`peran_id`) | tanpa id surrogate; tabel pivot pengguna–peran |
 
 ## Aturan skema
 

@@ -47,7 +47,7 @@ Apa yang dijual, oleh siapa, dan mana yang boleh tampil?
 
 - `Produk::sedangTampil()`, `PenjagaStok::ambil()` mengunci baris `produk` urut nomor (LP-4).
 - `PATCH /toko-saya/produk/{id}` menolak `stok` (`'prohibited'`); gunakan `POST /toko-saya/produk/{id}/stok` dengan selisih (LP-4, LP-11, wajib `Idempotency-Key`).
-- `PenjagaStok::sesuaikan()` — selisih relatif; harga diverifikasi dengan `harga_rupiah` bawaan, tidak ada pembacaan angka mutlak dari layar.
+- `PenjagaStok::sesuaikan()` — selisih relatif; tidak ada pembanding harga dan tidak ada pembacaan angka mutlak dari klien; hanya `selisih` yang divalidasi, dibatasi `StokTidakCukup`/`PenyesuaianStokDitolak`.
 - Uji `PenjagaStokTest`, `PenyesuaianStokTest`; skenario balapan `rebutan-stok`, `penyesuaian-stok`, `rebutan-checkout`.
 
 ## Aturan
