@@ -1,5 +1,12 @@
 <?php
 
+use App\Models\Alamat;
+use App\Models\Pengguna;
+
+beforeEach(function () {
+    $this->andi = Pengguna::factory()->pembeli()->create();
+});
+
 it('mendaftar alamat milik sendiri saja, alamat utama lebih dulu', function () {
     Alamat::factory()->cadangan()->for($this->andi, 'pengguna')
         ->create(['jalan' => 'Jl. Kantor 1']);
