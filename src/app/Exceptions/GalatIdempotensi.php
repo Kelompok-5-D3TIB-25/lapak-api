@@ -11,10 +11,11 @@ final class GalatIdempotensi extends GalatDomain
         return new self(
             'LP-11',
             'Permintaan ini wajib membawa header Idempotency-Key: 16 sampai 64 huruf, angka, '
-                . 'garis bawah, atau tanda hubung.',
+                .'garis bawah, atau tanda hubung.',
             422,
         );
     }
+
     public static function dipakaiPermintaanLain(): self
     {
         return new self(
@@ -23,6 +24,7 @@ final class GalatIdempotensi extends GalatDomain
             422,
         );
     }
+
     public static function sedangDiproses(): self
     {
         return new self(
