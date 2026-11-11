@@ -7,6 +7,7 @@ use App\Models\Pengguna;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+
 /*
 | Pintu uji: setiap pemanggilan yang berhasil membuat SATU kategori. Jumlah baris kategori
 | karenanya sama dengan jumlah efek yang benar-benar terjadi.
@@ -25,11 +26,12 @@ beforeEach(function () {
             if ($permintaan->boolean('meledak')) {
                 throw new RuntimeException('galat tak terduga');
             }
+
             return response()->json(['sukses' => true, 'data' => ['id' => $kategori->id]], 201);
         });
     $this->andi = Pengguna::factory()->create();
     $this->kunci = 'kunci-uji-0123456789';
-    $this->kirim = fn(array $badan, ?string $kunci = null) => $this->postJson(
+    $this->kirim = fn (array $badan, ?string $kunci = null) => $this->postJson(
         '/api/_uji/catat',
         $badan,
         ['Idempotency-Key' => $kunci ?? $this->kunci],

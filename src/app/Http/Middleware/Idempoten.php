@@ -26,6 +26,7 @@ use Throwable;
 final class Idempoten
 {
     private const POLA_KUNCI = '/\A[A-Za-z0-9_-]{16,64}\z/';
+
     public function handle(Request $request, Closure $next): Response
     {
         $kunci = (string) $request->header('Idempotency-Key');
@@ -33,8 +34,8 @@ final class Idempoten
             throw GalatIdempotensi::kunciTidakSah();
         }
         $idPengguna = $request->user()->id;
-        $rute = $request->method() . ' ' . $request->path();
-        $sidik = hash('sha256', $rute . "\n" . $request->getContent());
+        $rute = $request->method().' '.$request->path();
+        $sidik = hash('sha256', $rute."\n".$request->getContent());
         DB::beginTransaction();
         try {
             $catatan = new KunciIdempotensi;
@@ -48,6 +49,7 @@ final class Idempoten
             // Kunci ini sudah tercatat. Bila pencatatnya masih berjalan, INSERT di atas MENUNGGU
             // sampai ia selesai: indeks unik membuat permintaan kembar antre, bukan berlomba.
             DB::rollBack();
+
             return $this->ulangi($idPengguna, $kunci, $sidik);
         }
         try {
@@ -58,6 +60,7 @@ final class Idempoten
         }
         if (! $respons->isSuccessful()) {
             DB::rollBack();
+
             return $respons;
         }
         $catatan->forceFill([
@@ -65,8 +68,10 @@ final class Idempoten
             'badan_respons' => $respons->getContent(),
         ])->save();
         DB::commit();
+
         return $respons;
     }
+
     private function ulangi(int $idPengguna, string $kunci, string $sidik): Response
     {
         $catatan = KunciIdempotensi::query()
@@ -80,6 +85,7 @@ final class Idempoten
         if ($catatan->sidik !== $sidik) {
             throw GalatIdempotensi::dipakaiPermintaanLain();
         }
+
         return response($catatan->badan_respons, $catatan->kode_status, [
             'Content-Type' => 'application/json',
             'Idempotency-Replayed' => 'true',
