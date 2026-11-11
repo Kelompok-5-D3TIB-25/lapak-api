@@ -32,17 +32,18 @@
      9	mrdaknsh
      8	Rokkett2500
      6	Pradipta-ihsan-ariyanto
-     5	belazahra
+     6	belazahra
      5	victor-isMe
 
 == Baris ditambah dan dihapus per anggota
+belazahra    +769 -16
+mrdaknsh     +1870 -14
 Pradipta-ihsan-ariyanto +920 -95
-belazahra                +656 -6
-victor-isMe              +541 -4
-mrdaknsh                 +1870 -14
-Rokkett2500              +1243 -30
+Rokkett2500  +1243 -30
+victor-isMe  +541 -4
 
 == PR yang masuk ke main
+   Merge pull request #55 from Kelompok-5-D3TIB-25/sesi-4/penutup-bela
    Merge pull request #53 from Kelompok-5-D3TIB-25/sesi-4/balapan-ci-lintar
    Merge pull request #54 from Kelompok-5-D3TIB-25/sesi-4/urutan-kunci-mirda
    Merge pull request #52 from Kelompok-5-D3TIB-25/sesi-4/webhook-bela
