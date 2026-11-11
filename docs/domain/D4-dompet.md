@@ -38,8 +38,8 @@ Belum ada endpoint HTTP. Pintu HTTP ke uang baru dibuat setelah identitas (Sesi 
 
 ## Kontrak Sesi 3
 
-- `GET /api/v1/buku-besar/dompet` — seluruh dompet (`izin:buku-besar.lihat`).
-- `GET /api/v1/buku-besar/dompet/{id}/mutasi` — mutasi sebuah dompet (`izin:buku-besar.lihat`).
+- `GET /api/v1/buku-besar/dompet` — seluruh dompet (`izin:buku-besar.lihat`; sesi segar).
+- `GET /api/v1/buku-besar/dompet/{id}/mutasi` — mutasi sebuah dompet (`izin:buku-besar.lihat`; sesi segar).
 - `lapak:matriks-izin` — memverifikasi hanya izin yang dipakai terdaftar.
 - Matriks dompet: dompet milik penjual; buku besar untuk keuangan/auditor.
 

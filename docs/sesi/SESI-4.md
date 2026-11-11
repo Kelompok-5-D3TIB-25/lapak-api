@@ -74,7 +74,12 @@ victor-isMe  +541 -4
 
 ### Titipan untuk integrator Sesi 5
 
-- `main` hijau pada Pest (SQLite) dan CI; tag `sesi-4` dipasang pada merge PR penutup.
+- `main` hijau pada Pest (SQLite) dan CI; tag `sesi-4` dipasang di akhir Sesi 4.
 - CI `kualitas-mysql` wajib lulus; bila lewat batas waktu atau skenario, perbaiki di tugas CI, bukan dengan melonggarkan aturan skenario.
 - Lima titipan pada papan sesi: (1) pembayaran yang tiba setelah tagihan kedaluwarsa masih ditolak dan belum dikembalikan; (2) pintu penjual, konfirmasi terima, dan pembatalan oleh pembeli belum ada; (3) setiap rute POST baru wajib masuk `RuteIdempotenTest`; (4) catatan `kunci_idempotensi` belum dipangkas; (5) pelunasan dan pembatalan otomatis belum masuk log audit.
 - Latihan 1–6 (bagian G dokumen Sesi 4) wajib selesai sebelum Sesi 5.
+
+## Catatan histori
+
+Histori `main` ditulis ulang (identitas penulis dan pesan komit diacak demi keterbacaan); sehingga rekap `git shortlog` pada papan sesi ini tidak lagi bisa direproduksi, dan seluruh SHA yang disebut sebagai patokan di atas tidak lagi geçerli. Isi pohon (tree) tidak berubah.
+

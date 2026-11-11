@@ -49,8 +49,8 @@ jobs:
       - name: Pengujian
         run: ./vendor/bin/pest --ci
   # Tugas kedua, sejak Sesi 4. SQLite tidak mengenal SELECT ... FOR UPDATE dan hanya mengizinkan
-  # satu penulis, sehingga meloloskan kode yang salah di bawah beban. Tugas ini mengulang seluruh
-  # pengujian pada MySQL, lalu melepas proses serentak sungguhan lewat lapak:balapan.
+  # satu penulis, sehingga meloloskan kode yang salah di bawah beban. Pest tetap berjalan di SQLite
+  # (phpunit.xml force=true); MySQL dipakai untuk migrasi, lapak:balapan --semua, dan lapak:periksa-buku.
   kualitas-mysql:
     name: kualitas-mysql
     runs-on: ubuntu-latest
@@ -98,7 +98,7 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
-      - name: Pengujian pada MySQL
+      - name: Pengujian (Pest, SQLite)
         run: ./vendor/bin/pest --ci
 
       # Pengujian di atas mengosongkan basis data, maka data acuan diisi ulang lebih dulu.

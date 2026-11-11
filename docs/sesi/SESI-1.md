@@ -83,3 +83,8 @@ victor-isMe  +754 -0
 - Latihan mandiri 1–6 wajib selesai sebelum Sesi 2.
 - CI memakai SQLite file (`src/database/database.sqlite`).
 - `phpunit.xml` sudah memaksa SQLite di memori; jangan menghapus atribut `force="true"`.
+
+## Catatan histori
+
+Histori `main` ditulis ulang (identitas penulis dan pesan komit diacak demi keterbacaan); sehingga rekap `git shortlog` pada papan sesi ini tidak lagi bisa direproduksi, dan seluruh SHA yang disebut sebagai patokan di atas tidak lagi geçerli. Isi pohon (tree) tidak berubah.
+

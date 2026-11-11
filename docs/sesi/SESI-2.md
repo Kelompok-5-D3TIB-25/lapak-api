@@ -59,10 +59,15 @@ victor-isMe  +545 -45
 
 ### Kendala
 
-- Email Bela di `Credentials Kelompok 5.txt` mengandung karakter tak terlihat (U+2060 Word Joiner), sehingga commit Bela tidak teratribusi ke profil GitHub. Berkas diperbaiki dan kredensial baru dipakai; tag `sesi-2` menunjuk ke merge akhir Sesi 2 (`a07520d`).
+- Email Bela di `Credentials Kelompok 5.txt` mengandung karakter tak terlihat (U+2060 Word Joiner), sehingga commit Bela tidak teratribusi ke profil GitHub. Berkas diperbaiki dan kredensial baru dipakai; tag `sesi-2` dipasang pada akhir Sesi 2.
 
 ### Titipan untuk integrator Sesi 3
 
 - `main` hijau dan tag `sesi-2` sudah dipasang.
 - `docs/sesi/SESI-3.md` sudah disalin dari kerangka.
 - `phpunit.xml` memaksa SQLite di memori (`force="true"`); jangan menghapus atribut ini.
+
+## Catatan histori
+
+Histori `main` ditulis ulang (identitas penulis dan pesan komit diacak demi keterbacaan); sehingga rekap `git shortlog` pada papan sesi ini tidak lagi bisa direproduksi, dan seluruh SHA yang disebut sebagai patokan di atas tidak lagi geçerli. Isi pohon (tree) tidak berubah.
+

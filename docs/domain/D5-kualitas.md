@@ -20,7 +20,7 @@ Tidak ada. D5 menyediakan kontrak yang dipakai semua domain.
 - `App\Http\Middleware\PaksaJson` — paksa `Accept: application/json`.
 - `App\Http\Middleware\IdPermintaan` — `X-Request-Id` di respons dan log.
 - `App\Http\Middleware\PeriksaIzin` — `middleware('izin:<nama>')`, satu izin per rute.
-- `App\Services\PemeriksaIzin`, `App\Services\IngatanIzin` — pemeriksa izin ber-cache.
+- `App\Services\PemeriksaIzin` — pemeriksa izin ber-cache per generasi.
 - `App\Services\PengelolaPeran` — satu-satunya pintu memberi/mencabut peran; mencabut seluruh sesi akun.
 - `App\Enums\NamaPeran`, `App\Enums\NamaIzin` — enum; pemetaan peran → izin ditulis satu-satunya di sini.
 - `App\Models\Peran`, `App\Models\Izin` — tabel otorisasi.
@@ -61,7 +61,7 @@ Kode HTTP: 401 `BELUM_MASUK`, 403 `DITOLAK`, 404 `TIDAK_DITEMUKAN`, 405 `METODE_
 - Controller tidak merakit galat sendiri.
 - Galat tak terduga tidak membocorkan pesan asli saat `APP_DEBUG=false`.
 - Setiap respons API membawa `X-Request-Id` buatan server.
-- CI berjalan pada setiap PR ke `main`: Pint, migrasi + seeder, `lapak:periksa-buku`, Pest (SQLite), dan Pest + `lapak:balapan --semua` pada MySQL (`kualitas-mysql`).
+- CI berjalan pada setiap PR ke `main`: Pint, migrate:fresh --seed, `lapak:periksa-buku`, dan Pest (SQLite di memori, di kedua tugas). Di `kualitas-mysql`, yang menyentuh MySQL hanyalah `migrate:fresh --seed`, `lapak:balapan --semua`, dan `lapak:periksa-buku`; Pest tetap berjalan di SQLite di memori (lihat SESI-4).
 - Rute terlindung menyebut paling banyak satu izin. Rute yang tidak butuh izin khusus ditulis `'*'`.
 - `PeranIzinSeeder` menyalin `NamaPeran::izinBawaan()` ke basis data; tidak ada peran yang memegang seluruh.
 - Perubahan `.github/`, `config/lapak.php`, `composer.json`, `CODEOWNERS` wajib ditinjau pemilik D5.

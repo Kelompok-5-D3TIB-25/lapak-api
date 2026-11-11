@@ -86,6 +86,7 @@
 /src/routes/console.php                             @Rokkett2500
 /src/config/lapak.php                               @Rokkett2500
 /src/composer.json                                  @Rokkett2500
+/.github/workflows/                                @Rokkett2500
 /.github/                                           @Rokkett2500
 /docs/KONTRAK-API.md                                @Rokkett2500
 /src/tests/TestCase.php                             @Rokkett2500

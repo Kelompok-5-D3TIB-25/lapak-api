@@ -62,3 +62,7 @@
 - Latihan mandiri 1–6 wajib selesai sebelum Sesi 4.
 - Repository: LAPAK board (Hanggeoon? no). CI memakai SQLite; jangan hapus `force="true"` pada `src/phpunit.xml`.
 
+## Catatan histori
+
+Histori `main` ditulis ulang (identitas penulis dan pesan komit diacak demi keterbacaan); sehingga rekap `git shortlog` pada papan sesi ini tidak lagi bisa direproduksi, dan seluruh SHA yang disebut sebagai patokan di atas tidak lagi geçerli. Isi pohon (tree) tidak berubah.
+
