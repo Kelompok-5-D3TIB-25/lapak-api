@@ -10,6 +10,12 @@ return [
     'tahan_dana_hari' => (int) env('LAPAK_TAHAN_DANA_HARI', 3),
     // LP-16: batas bawah pencairan saldo penjual.
     'pencairan_minimum_rupiah' => (int) env('LAPAK_PENCAIRAN_MINIMUM', 50000),
+    // Gerbang pembayaran (disimulasikan). Rahasia bersama penanda tangan webhook: wajib diisi
+    // lewat src/.env dan tidak pernah di-commit. Bila kosong, seluruh webhook ditolak.
+    'gateway' => [
+        'rahasia' => env('LAPAK_GATEWAY_RAHASIA'),
+        'toleransi_detik' => 300,
+    ],
     'katalog' => [
         'per_halaman_bawaan' => 12,
         'per_halaman_maksimum' => 60,
