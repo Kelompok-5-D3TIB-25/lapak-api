@@ -117,23 +117,78 @@ Respons `201`: `id`, `nama`, `surel` (huruf kecil), `telepon`, `status`, `terdaf
 
 Hanya `produk_id` dan `kuantitas` yang divalidasi. `harga_satuan`, `total_bayar`, dan kolom lain dari klien diabaikan (LP-6). Satu toko menghasilkan satu rincian (LP-7). Komisi dihitung dari subtotal, ongkir utuh untuk penjual (LP-8).
 
+## Endpoint Sesi 2
+
+| Metode | Path | Nama rute | Keterangan |
+|---|---|---|---|
+| POST | `/api/v1/masuk` | `v1.masuk` | Masuk; batas laju per akun dan per IP |
+| POST | `/api/v1/keluar` | `v1.keluar` | Cabut sesi perangkat ini |
+| GET | `/api/v1/saya` | `v1.saya` | Identitas + peran + izin |
+| GET | `/api/v1/sesi` | `v1.sesi.index` | Daftar sesi milik pengguna |
+| POST | `/api/v1/sesi/konfirmasi` | `v1.sesi.konfirmasi` | Konfirmasi kata sandi, membuat sesi segar |
+| DELETE | `/api/v1/sesi/{pengenal}` | `v1.sesi.destroy` | Cabut sesi perangkat lain (sesi segar) |
+| GET | `/api/v1/toko-saya` | `v1.toko-saya.show` | Toko milik sesi |
+| PATCH | `/api/v1/toko-saya` | `v1.toko-saya.update` | Perbarui toko |
+| POST | `/api/v1/toko-saya` | `v1.toko-saya.store` | Ajukan pembukaan toko |
+| GET | `/api/v1/toko-saya/produk` | `v1.toko-saya.produk.index` | Produk toko milik sesi |
+| POST | `/api/v1/toko-saya/produk` | `v1.toko-saya.produk.store` | Produk baru (`draf`) |
+| PATCH | `/api/v1/toko-saya/produk/{id}` | `v1.toko-saya.produk.update` | Ubah detail; `stok` ditutup (422) |
+| DELETE | `/api/v1/toko-saya/produk/{id}` | `v1.toko-saya.produk.destroy` | Arsipkan |
+| GET | `/api/v1/keranjang` | `v1.keranjang.show` | Keranjang milik sesi |
+| DELETE | `/api/v1/keranjang` | `v1.keranjang.kosongkan` | Kosongkan |
+| PUT | `/api/v1/keranjang/butir/{produkId}` | `v1.keranjang.simpan` | Setel kuantitas |
+| DELETE | `/api/v1/keranjang/butir/{produkId}` | `v1.keranjang.hapus` | Hapus butir |
+| GET | `/api/v1/dompet` | `v1.dompet.show` | Saldo dompet sendiri (penjual) |
+| GET | `/api/v1/dompet/mutasi` | `v1.dompet.mutasi` | Riwayat mutasi (sesi segar) |
+
+## Endpoint Sesi 3
+
+| Metode | Path | Nama rute | Keterangan |
+|---|---|---|---|
+| GET | `/api/v1/admin/pengguna` | `v1.admin.pengguna.index` | Daftar pengguna (admin) |
+| PUT | `/api/v1/admin/pengguna/{id}/peran/{peran}` | `v1.admin.pengguna.peran.beri` | Beri peran (sesi segar) |
+| DELETE | `/api/v1/admin/pengguna/{id}/peran/{peran}` | `v1.admin.pengguna.peran.cabut` | Cabut peran (sesi segar) |
+| GET | `/api/v1/admin/toko` | `v1.admin.toko.index` | Daftar toko (admin) |
+| POST | `/api/v1/admin/toko/{id}/setujui` | `v1.admin.toko.setujui` | Setujui: toko aktif, pemilik jadi penjual |
+| POST | `/api/v1/admin/toko/{id}/tangguhkan` | `v1.admin.toko.tangguhkan` | Tangguhkan dengan alasan |
+| GET | `/api/v1/buku-besar/dompet` | `v1.buku-besar.dompet.index` | Seluruh dompet (staf keuangan/auditor) |
+| GET | `/api/v1/buku-besar/dompet/{id}/mutasi` | `v1.buku-besar.dompet.mutasi` | Mutasi sebuah dompet (staf keuangan/auditor) |
+
+Admin/pengguna dan admin/toko menuntut sesi segar untuk tindakan penulisan.
+
+## Endpoint Sesi 4
+
+| Metode | Path | Nama rute | Keterangan |
+|---|---|---|---|
+| GET | `/api/v1/alamat` | `v1.alamat.index` | Alamat milik sesi, utama lebih dulu |
+| POST | `/api/v1/alamat` | `v1.alamat.store` | Tambah (maksimal 5) |
+| PUT | `/api/v1/alamat/{id}/utama` | `v1.alamat.utama` | Jadikan utama (idempoten) |
+| DELETE | `/api/v1/alamat/{id}` | `v1.alamat.destroy` | Hapus |
+| POST | `/api/v1/toko-saya/produk/{id}/stok` | `v1.toko-saya.produk.stok` | Penyesuaian stok relatif; wajib `Idempotency-Key` |
+| POST | `/api/v1/checkout` | `v1.checkout` | Checkout atomik lintas toko; wajib `Idempotency-Key` |
+| GET | `/api/v1/pesanan` | `v1.pesanan.index` | Daftar pesanan milik sesi |
+| GET | `/api/v1/pesanan/{nomor}` | `v1.pesanan.show` | Satu pesanan beserta tagihannya |
+| GET | `/api/v1/pembayaran/{kode}` | `v1.pembayaran.show` | Tagihan milik sesi (hanya membaca) |
+| POST | `/api/v1/webhook/pembayaran` | `v1.webhook.pembayaran` | Kabar dari gerbang; dipanggil gerbang, bukan klien |
+
 ## Otorisasi
 - Kewenangan ditentukan izin yang melekat pada peran, bukan nama peran (LP-2). Satu akun boleh
- memegang beberapa peran; izinnya adalah gabungan izin seluruh perannya.
+  memegang beberapa peran; izinnya adalah gabungan izin seluruh perannya.
 - Rute terlindung menyebut paling banyak satu izin: `->middleware('izin:<nama>')`. Bila dua peran
- membutuhkan pintu yang sama, keduanya diberi izin yang sama. Rute tidak pernah menyebut nama peran.
+  membutuhkan pintu yang sama, keduanya diberi izin yang sama. Rute tidak pernah menyebut nama peran.
 - Setiap rute terlindung memiliki tepat satu baris pada `tests/Feature/Sistem/matriks/<domain>.php`.
- Rute yang terbuka bagi siapa pun yang sudah masuk ditulis `'*'`, tidak dibiarkan tanpa baris.
+  Rute yang terbuka bagi siapa pun yang sudah masuk ditulis `'*'`, tidak dibiarkan tanpa baris.
 - Urutan pemeriksaan selalu sama: kunci sah (401), memegang izin (403 `DITOLAK`), sesi segar bila
- rutenya menuntut (403 `LP-15`). Baru setelah ketiganya lolos, masukan divalidasi dan objek dicari.
- Orang yang tidak berwenang karenanya menerima 403 yang sama untuk nomor yang ada dan yang tidak ada.
+  rutenya menuntut (403 `LP-15`). Baru setelah ketiganya lolos, masukan divalidasi dan objek dicari.
+  Orang yang tidak berwenang karenanya menerima 403 yang sama untuk nomor yang ada dan yang tidak ada.
 - Pertanyaan "objek yang ini boleh?" dijawab di dalam controller: kueri berlingkup (objek milik
- orang lain dijawab 404) atau Policy (403 `DITOLAK`). Lihat `docs/domain/` untuk pilihan tiap domain.
+  orang lain dijawab 404) atau Policy (403 `DITOLAK`). Lihat `docs/domain/` untuk pilihan tiap domain.
 - Badan 403 `DITOLAK` selalu sama dan tidak menyebut izin apa yang kurang.
 - `GET /saya` menyertakan `pengguna.peran` dan `izin`. Klien memakainya untuk menata tampilan saja;
- server memutuskan ulang pada setiap permintaan.
+  server memutuskan ulang pada setiap permintaan.
 - Peran hanya berubah lewat `App\Services\PengelolaPeran`. Setiap perubahan mencabut seluruh sesi
- akun itu. Klien yang tiba-tiba menerima 401 mengarahkan penggunanya masuk ulang.
+  akun itu. Klien yang tiba-tiba menerima 401 mengarahkan penggunanya masuk ulang.
+
 | Peran | Izin |
 | --- | --- |
 | `pembeli` | `keranjang.kelola`, `toko.buka` |
@@ -141,22 +196,25 @@ Hanya `produk_id` dan `kuantitas` yang divalidasi. `harga_satuan`, `total_bayar`
 | `admin` | `toko.moderasi`, `peran.kelola` |
 | `keuangan` | `buku-besar.lihat` |
 | `auditor` | `buku-besar.lihat` |
+
 Tabel di atas disalin dari `App\Enums\NamaPeran::izinBawaan()`, satu-satunya tempat pemetaan ini
 ditulis. `PeranIzinSeeder` menyalinnya ke basis data. Tidak ada peran yang memegang seluruh izin.
 
 ## Idempotensi
 - Setiap permintaan yang mengubah uang atau stok wajib membawa header `Idempotency-Key` (LP-11):
- 16 sampai 64 huruf, angka, garis bawah, atau tanda hubung. UUID memenuhi syarat ini.
+  16 sampai 64 huruf, angka, garis bawah, atau tanda hubung. UUID memenuhi syarat ini.
 - Klien membuat SATU kunci untuk satu niat, misalnya satu kali menekan tombol bayar, dan memakai
- kunci yang sama setiap kali mengulang permintaan itu karena jaringan putus atau batas waktu habis.
+  kunci yang sama setiap kali mengulang permintaan itu karena jaringan putus atau batas waktu habis.
 - Permintaan pertama yang berhasil (2xx) dicatat bersama responsnya. Pengulangan dengan kunci dan
- badan yang sama menerima respons yang sama, ditandai header `Idempotency-Replayed: true`, dan
- tidak berefek lagi.
+  badan yang sama menerima respons yang sama, ditandai header `Idempotency-Replayed: true`, dan
+  tidak berefek lagi.
 - Permintaan yang gagal tidak meninggalkan catatan. Setelah sebabnya dibetulkan, kunci yang sama
- boleh dipakai lagi.
+  boleh dipakai lagi.
 - Kunci yang sama dengan badan yang berbeda dijawab 422 `LP-11`. Kunci berlaku per pengguna.
 - Catatan kunci dan seluruh perubahan data berada dalam satu transaksi basis data. Rute yang
- 
+  memasang middleware `idempoten` dijamin tidak pernah mencatat efek tanpa mencatat kuncinya,
+  dan tidak pernah mencatat kunci tanpa mencatat efeknya.
+
 ## Webhook pembayaran
 
 - `POST /webhook/pembayaran` adalah satu-satunya rute tulis tanpa kunci sesi. Pemanggilnya
