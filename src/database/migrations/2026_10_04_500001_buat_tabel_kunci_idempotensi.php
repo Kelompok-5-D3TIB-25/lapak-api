@@ -24,6 +24,7 @@ return new class extends Migration
             $tabel->unique(['pengguna_id', 'kunci']);
         });
     }
+
     public function down(): void
     {
         Schema::dropIfExists('kunci_idempotensi');
