@@ -55,7 +55,7 @@ API hanya berbicara JSON. Middleware `PaksaJson` menetapkan `Accept: application
 | 429 | `TERLALU_SERING` | Pembatasan laju |
 | 500 | `GALAT_SERVER` | Galat tak terduga; rincian tidak dikirim ke klien |
 
-Pelanggaran aturan bisnis membawa kode `LP-1` sampai `LP-17` pada `galat.kode`. Status HTTP ditentukan pemilik aturan (umumnya 422, stok 409).
+Pelanggaran aturan bisnis membawa kode `LP-1` sampai `LP-17` pada `galat.kode`. Selain itu domain memakai kode non-LP: `KERANJANG_KOSONG`, `KERANJANG_PENUH`, `ALAMAT_PENUH`, `JUMLAH_TIDAK_COCOK`, `TANDA_TANGAN_SALAH`; HTTP umum tak dikenal dipetakan ke `GALAT_HTTP`. Status HTTP ditentukan pemilik aturan (umumnya 422, stok 409).
 
 ## Header
 
@@ -191,7 +191,7 @@ Admin/pengguna dan admin/toko menuntut sesi segar untuk tindakan penulisan.
 
 | Peran | Izin |
 | --- | --- |
-| `pembeli` | `keranjang.kelola`, `toko.buka` |
+| `pembeli` | `keranjang.kelola`, `toko.buka`, `pesanan.buat` |
 | `penjual` | `produk.kelola`, `dompet.lihat` |
 | `admin` | `toko.moderasi`, `peran.kelola` |
 | `keuangan` | `buku-besar.lihat` |
