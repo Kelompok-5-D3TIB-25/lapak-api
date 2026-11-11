@@ -13,4 +13,5 @@
         'GET api/v1/admin/pengguna' => ['admin'],
         'PUT api/v1/admin/pengguna/{id}/peran/{peran}' => ['admin'],
         'DELETE api/v1/admin/pengguna/{id}/peran/{peran}' => ['admin'],
+        'GET api/v1/alamat' => ['pembeli'],
     ];

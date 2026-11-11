@@ -14,8 +14,11 @@ use Throwable;
 final class BalapanAnak extends Command
 {
     protected $signature = 'lapak:balapan-anak {skenario} {nomor} {muatan}';
+
     protected $description = 'Proses anak uji balapan';
+
     protected $hidden = true;
+
     public function handle(): int
     {
         if (app()->isProduction()) {
@@ -37,10 +40,11 @@ final class BalapanAnak extends Command
             // Galat basis data sudah diawali SQLSTATE; galat lain diawali nama kelasnya.
             $pesan = $galat instanceof QueryException
                 ? $galat->getMessage()
-                : class_basename($galat) . ': ' . $galat->getMessage();
-            $hasil = 'GALAT ' . Str::limit($pesan, 64);
+                : class_basename($galat).': '.$galat->getMessage();
+            $hasil = 'GALAT '.Str::limit($pesan, 64);
         }
         $this->line($hasil);
+
         return self::SUCCESS;
     }
 }
