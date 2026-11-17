@@ -50,7 +50,10 @@ final class PenerbitSesi
     public function rotasi(Sesi $sesi): string
     {
         $kunci = KunciSesi::baru($sesi->pengenal);
-        $sesi->forceFill(['hash_kunci' => $kunci->hash()])->save();
+        $sesi->forceFill([
+            'hash_kunci_lama' => $sesi->hash_kunci,
+            'hash_kunci' => $kunci->hash(),
+        ])->save();
 
         return $kunci->teks();
     }
