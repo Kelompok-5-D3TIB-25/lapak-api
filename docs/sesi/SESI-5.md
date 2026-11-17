@@ -13,13 +13,13 @@
 | #67 | A2 | `sesi-5/kontrak-dana-dimas` | @nabelazahra-ptr26 | Tabel pencairan, dompet penahan, LayananDana, tagihan dapat dibatalkan | Merged |
 | #68 | A3 | `sesi-5/kontrak-pesanan-rani` | @mrdaknsh | Cap waktu proses, LayananPesanan, pendukung uji | Merged |
 | #69 | B1 | `sesi-5/jejak-identitas-bambang` | @ihsanpradipta45-alt | Kunci lama terdeteksi; jejak masuk, keluar, dan peran | Merged |
-| #70 | B2 | `sesi-5/pesanan-toko-bagas` | @victor-isMe | Izin pesanan.proses, lima rute pesanan toko, jejak moderasi | Merged |
-| #71 | B3 | `sesi-5/tindakan-pembeli-rani` | @mrdaknsh | Terima, batal, batal checkout, penyelesaian otomatis, dua skenario | Merged |
-| #72 | B4 | `sesi-5/pencairan-dimas` | @nabelazahra-ptr26 | Pembayaran terlambat, pencairan, invarian keenam, dua skenario | Merged |
-| #73 | B5 | `sesi-5/rantai-audit-sekar` | @Rokkett2500 | Kunci kepala rantai, verifikasi, pintu auditor, invarian CI | Merged |
-| #74 | Rilis | `sesi-5/rilis-sekar` | @Rokkett2500 | Uji penutup, versi 1.0.0, README, papan sesi | Merged |
-| #75 | P1 | `sesi-5/jejak-stok-bagas` | @victor-isMe | Penyesuaian stok berjejak: temuan kandidat pertama | Merged |
-| #76 | Catatan | `sesi-5/catatan-perubahan-bambang` | @ihsanpradipta45-alt | CHANGELOG.md | Merged |
+| #77 | B2 | `sesi-5/pesanan-toko-bagas` | @victor-isMe | Izin pesanan.proses, lima rute pesanan toko, jejak moderasi | Merged |
+| #78 | B3 | `sesi-5/tindakan-pembeli-rani` | @mrdaknsh | Terima, batal, batal checkout, penyelesaian otomatis, dua skenario | Merged |
+| #79 | B4 | `sesi-5/pencairan-dimas` | @nabelazahra-ptr26 | Pembayaran terlambat, pencairan, invarian keenam, dua skenario | Merged |
+| #80 | B5 | `sesi-5/rantai-audit-sekar` | @Rokkett2500 | Kunci kepala rantai, verifikasi, pintu auditor, invarian CI | Merged |
+| #81 | Rilis | `sesi-5/rilis-sekar` | @Rokkett2500 | Uji penutup, versi 1.0.0, README, papan sesi | Merged |
+| #82 | P1 | `sesi-5/jejak-stok-bagas` | @victor-isMe | Penyesuaian stok berjejak: temuan kandidat pertama | Merged |
+| #83 | Catatan | `sesi-5/catatan-perubahan-bambang` | @ihsanpradipta45-alt | CHANGELOG.md | Merged |
 
 ## Rekap kontribusi
 
@@ -32,10 +32,10 @@
      4	Pradipta Ihsan
 
 == PR yang masuk ke main
-   Merge pull request #73 from Kelompok-5-D3TIB-25/sesi-5/rantai-audit-sekar
-   Merge pull request #72 from Kelompok-5-D3TIB-25/sesi-5/pencairan-dimas
-   Merge pull request #71 from Kelompok-5-D3TIB-25/sesi-5/tindakan-pembeli-rani
-   Merge pull request #70 from Kelompok-5-D3TIB-25/sesi-5/pesanan-toko-bagas
+   Merge pull request #80 from Kelompok-5-D3TIB-25/sesi-5/rantai-audit-sekar
+   Merge pull request #79 from Kelompok-5-D3TIB-25/sesi-5/pencairan-dimas
+   Merge pull request #78 from Kelompok-5-D3TIB-25/sesi-5/tindakan-pembeli-rani
+   Merge pull request #77 from Kelompok-5-D3TIB-25/sesi-5/pesanan-toko-bagas
    Merge pull request #69 from Kelompok-5-D3TIB-25/sesi-5/jejak-identitas-bambang
    Merge pull request #68 from Kelompok-5-D3TIB-25/sesi-5/kontrak-pesanan-rani
    Merge pull request #67 from Kelompok-5-D3TIB-25/sesi-5/kontrak-dana-dimas
@@ -48,7 +48,7 @@
 ### Kendala
 
 - Dua peninjau per PR memaksa semua orang meninjau; hanya #65 dan #66 tidak menunggu lingkar penuh.
-- Temuan kandidat pertama: penyesuaian stok belum berjejak (dikelola lewat PR #75).
+- Temuan kandidat pertama: penyesuaian stok belum berjejak (dikelola lewat PR #82).
 - Tag v1.0.0 dipasang setelah `lapak:periksa-buku` hijau dan MySQL lolos seluruh `lapak:balapan`.
 
 ### Titipan untuk rilis v1.0.0
