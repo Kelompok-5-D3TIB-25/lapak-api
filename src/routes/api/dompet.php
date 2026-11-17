@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\BukuBesarController;
 use App\Http\Controllers\DompetController;
+use App\Http\Controllers\PencairanSayaController;
+use App\Http\Controllers\PencairanStafController;
 use App\Http\Controllers\PembayaranSayaController;
 use App\Http\Controllers\WebhookPembayaranController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +25,31 @@ Route::middleware(['auth:sesi', 'izin:buku-besar.lihat', 'sesi.segar'])
     ->group(function (): void {
         Route::get('dompet', [BukuBesarController::class, 'index'])->name('dompet.index');
         Route::get('dompet/{id}/mutasi', [BukuBesarController::class, 'mutasi'])->name('dompet.mutasi');
+    });
+
+// Pencairan saldo penjual.
+Route::middleware(['auth:sesi', 'izin:pencairan.ajukan'])
+    ->prefix('dompet/pencairan')
+    ->name('dompet.pencairan.')
+    ->group(function (): void {
+        Route::get('/', [PencairanSayaController::class, 'index'])->name('index');
+        Route::post('/', [PencairanSayaController::class, 'store'])
+            ->middleware(['throttle:transaksi', 'idempoten', 'sesi.segar'])
+            ->name('store');
+    });
+
+// Putusan pencairan oleh staf keuangan.
+Route::middleware(['auth:sesi', 'izin:pencairan.setujui', 'sesi.segar'])
+    ->prefix('keuangan/pencairan')
+    ->name('keuangan.pencairan.')
+    ->group(function (): void {
+        Route::get('/', [PencairanStafController::class, 'index'])->name('index');
+        Route::post('{kode}/setujui', [PencairanStafController::class, 'setujui'])
+            ->middleware('idempoten')
+            ->name('setujui');
+        Route::post('{kode}/tolak', [PencairanStafController::class, 'tolak'])
+            ->middleware('idempoten')
+            ->name('tolak');
     });
 
 // Tagihan milik pembeli yang sedang masuk. Pembeli hanya dapat MELIHAT tagihannya.
