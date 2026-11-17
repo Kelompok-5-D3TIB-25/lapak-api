@@ -33,6 +33,8 @@ Dengan pola ini urutan migrasi mengikuti urutan domain, bukan siapa yang lebih d
 | D5 | `peran`, `izin` (`log_audit` — Sesi 5) | Sesi 3 |
 | D2 | kolom moderasi `dimoderasi_oleh`, `dimoderasi_pada`, `catatan_moderasi` pada `toko` | `2026_10_03_200001_tambah_moderasi_pada_toko.php` |
 | D5 | `kunci_idempotensi` | `2026_10_04_500001_buat_tabel_kunci_idempotensi.php` |
+| D5 | `log_audit`, `rantai_audit` | Sesi 5 |
+| D4 | `pencairan` | `2026_10_05_400001_buat_tabel_pencairan.php` |
 
 ## Arah foreign key
 
@@ -49,6 +51,7 @@ produk (D2) <-- butir_pesanan (D3)
 toko (D2) <-- pesanan (D3)
 checkout (D3) <-- pembayaran (D4)
 pengguna (D1) <-- kunci_idempotensi (D5)
+pengguna (D1) <-- pencairan (D4)           pengguna (D1) <-- log_audit (D5)
 pengguna (D1) <-- peran (D5) <-- peran_izin (D5) --> izin (D5)
 pengguna (D1) <-- pengguna_peran (D5) --> peran (D5)
 ```
@@ -145,7 +148,7 @@ Index tambahan: `['status', 'kategori_id']`, `harga_rupiah`.
 | `id` | bigint PK | |
 | `dompet_id` | FK `dompet.id` | |
 | `kelompok` | uuid | satu pemindahan = dua baris |
-| `jenis` | string(20) | `dana_masuk`, `lepas_dana`, `komisi`, `pengembalian`, `pencairan` |
+| `jenis` | string(20) | `dana_masuk`, `lepas_dana`, `komisi`, `pengembalian`, `tahan_pencairan`, `batal_pencairan`, `pencairan` |
 | `jumlah_rupiah` | bigInteger | bertanda |
 | `saldo_setelah` | bigInteger | |
 | `rujukan` | string(60) | |
@@ -284,10 +287,16 @@ urutan di bawah ini. Sebuah transaksi boleh melompati anak tangga, tetapi tidak 
 | 1 | `pengguna`, lalu `alamat` miliknya | `BukuAlamat` |
 | 2 | `keranjang`, lalu `butir_keranjang` | `LayananCheckout` |
 | 3 | `checkout` | `GembokCheckout` |
-| 4 | `pembayaran` | `LayananPembayaran` |
+| 4 | `pembayaran`, atau `pencairan` | `LayananPembayaran`, `LayananPencairan` |
 | 5 | `pesanan` | `MesinStatusPesanan` |
 | 6 | `produk`, urut nomor menaik | `PenjagaStok` |
 | 7 | `dompet`, urut nomor menaik | `BukuBesar` |
+| 8 | `rantai_audit`, kepala rantai log audit | `PencatatAudit` |
+
+Dua tambahan Sesi 5:
+
+- `pencairan` menempati anak tangga yang sama dengan `pembayaran`. Tidak ada transaksi yang mengunci keduanya; keduanya sama-sama dikunci sebelum `dompet`.
+- Kepala rantai log audit adalah anak tangga TERAKHIR bagi setiap transaksi, apa pun yang dikuncinya sebelum itu, termasuk baris `sesi`, `toko`, dan `pengguna_peran` yang tidak tercantum di atas. `PencatatAudit::catat()` karenanya selalu dipanggil paling akhir. Kepala rantai hanya satu baris untuk seluruh aplikasi: selama sebuah transaksi memegangnya, setiap tindakan lain yang berjejak menunggu.
 
 Middleware `idempoten` mencatat kuncinya sebelum anak tangga pertama. Catatan itu baris baru,
 dan tidak ada transaksi yang memintanya setelah memegang kunci dari tabel di atas.

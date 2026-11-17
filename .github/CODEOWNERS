@@ -130,3 +130,19 @@
 /src/app/Balapan/PenyesuaianStok.php              @victor-isMe
 /src/app/Balapan/KeranjangGanda.php               @mrdaknsh
 /src/app/Balapan/WebhookGanda.php                 @nabelazahra-ptr26
+
+# Sesi 5: pintu tunggal, log audit, dan berkas rilis
+/src/app/Services/LayananPesanan.php               @nabelazahra-ptr26
+/src/app/Services/PenyelesaianOtomatis.php         @nabelazahra-ptr26
+/src/tests/Pendukung/                              @nabelazahra-ptr26
+/src/app/Http/Controllers/PesananTokoController.php @victor-isMe
+/src/app/Services/LayananDana.php                  @mrdaknsh
+/src/app/Services/LayananPencairan.php             @mrdaknsh
+/src/app/Models/Pencairan.php                      @mrdaknsh
+/src/app/Services/PencatatAudit.php                @Rokkett2500
+/src/app/Services/PemeriksaRantaiAudit.php         @Rokkett2500
+/src/app/Models/LogAudit.php                       @Rokkett2500
+/src/app/Enums/PeristiwaAudit.php                  @Rokkett2500
+/docs/RILIS.md                                     @Rokkett2500
+/CHANGELOG.md                                      @ihsanpradipta45-alt
+/src/app/Domain/Audit/                             @Rokkett2500
