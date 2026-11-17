@@ -15,9 +15,9 @@ Kolom "Ditegakkan" hanya diisi integrator pada penutup sesi.
 | LP-9 | Nomor pesanan berformat LPK-YYYYMMDD-NNNNNN dan unik seumur hidup sistem. | `PenomorPesanan`, `Pesanan::booted`, `unique` pada `pesanan.nomor` |
 | LP-10 | Status pesanan bergerak menunggu pembayaran, dibayar, dikemas, dikirim, selesai. Pembatalan hanya sebelum dikirim. | Sebagian: `AturanTransisi`, `MesinStatusPesanan`, `PembatalanOtomatis`; pintu penjual dan pembatalan oleh pembeli menyusul |
 | LP-11 | Setiap permintaan yang mengubah uang atau stok wajib membawa `Idempotency-Key`. | Middleware `idempoten`, `RuteIdempotenTest`; skenario `kunci-ganda` |
-| LP-12 | Dana pembeli ditahan di escrow dan dilepas setelah pembeli mengonfirmasi terima, atau otomatis 3 hari setelah dikirim. | Sebagian: dana masuk escrow pada `LayananPembayaran::terima`; pelepasannya menyusul |
+| LP-12 | Dana pembeli ditahan di escrow dan dilepas setelah pembeli mengonfirmasi terima, atau otomatis 3 hari setelah dikirim. | `LayananPesanan::terima`, `PenyelesaianOtomatis`, `LayananDana::lepaskan` |
 | LP-13 | Saldo hanya berubah lewat pemindahan antardompet yang tercatat sebagai sepasang mutasi berjumlah nol. Mutasi tidak diubah dan tidak dihapus. Hanya dompet eksternal yang boleh negatif. | `BukuBesar`, `MutasiSaldo::booted`, `lapak:periksa-buku` dengan lima invarian |
 | LP-14 | Kunci sesi ditampilkan satu kali dan disimpan sebagai hash. Sesi berlaku paling lama 7 hari. | `KunciSesi`, `PenerbitSesi`, `PemeriksaSesi`, `lapak:pangkas-sesi`, Sesi 2 |
-| LP-15 | Tindakan sensitif menuntut sesi segar: kata sandi dikonfirmasi ulang dalam 10 menit terakhir. | Sebagian: ditambah `PenjagaTransaksi` untuk checkout bernilai besar |
-| LP-16 | Pencairan saldo minimal Rp 50.000, disetujui peran keuangan, dan penyetuju tidak boleh orang yang sama dengan pengaju. | Belum — Sesi 5 |
-| LP-17 | Setiap tindakan sensitif tercatat pada log audit yang hanya dapat ditambah dan berantai hash. | Belum — Sesi 5 |
+| LP-15 | Tindakan sensitif menuntut sesi segar: kata sandi dikonfirmasi ulang dalam 10 menit terakhir. | `sesi.segar`, pencairan, log audit, dan pintu audit |
+| LP-16 | Pencairan saldo minimal Rp 50.000, disetujui peran keuangan, dan penyetuju tidak boleh orang yang sama dengan pengaju. | `LayananPencairan`, `Pencairan`, `lapak:periksa-buku` invarian keenam |
+| LP-17 | Setiap tindakan sensitif tercatat pada log audit yang hanya dapat ditambah dan berantai hash. | `PencatatAudit`, `LogAudit`, `RantaiHash`, `lapak:verifikasi-audit` |
