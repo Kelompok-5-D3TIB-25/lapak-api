@@ -14,4 +14,7 @@ enum StatusPembayaran: string
 
     /** Dibatalkan pembeli sebelum dibayar. */
     case Dibatalkan = 'dibatalkan';
+
+    /** Tagihan ditutup, tetapi uangnya tiba terlambat dan dibukukan lalu dikembalikan. */
+    case Dikembalikan = 'dikembalikan';
 }
