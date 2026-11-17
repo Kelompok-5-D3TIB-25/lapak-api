@@ -246,3 +246,12 @@ ditulis. `PeranIzinSeeder` menyalinnya ke basis data. Tidak ada peran yang memeg
 - Penyetuju tidak boleh orang yang sama dengan pengaju. Uang baru keluar atas keputusan orang kedua.
 - `LayananDana::lepaskan()` memindahkan komisi lalu bagian penjual; `kembalikan()` mengembalikan
   seluruh nilai pesanan termasuk ongkir ke dompet `eksternal`.
+
+## Daur hidup pesanan
+
+- Status pesanan hanya dapat berpindah lewat `LayananPesanan` (satu pintu). Perubahan hampir tidak
+  pernah berdiri sendiri: stok, uang, dan jejak audit ikut dalam transaksi yang sama.
+- `POST /pesanan/{nomor}/terima` menyelesaikan pesanan dan melepas dana (LP-12).
+  `POST /pesanan/{nomor}/batal` membatalkan satu pesanan yang sudah dibayar dan belum dikirim.
+  `POST /checkout/{kode}/batal` membatalkan checkout yang belum dibayar (LP-7, LP-10).
+- Cap waktu proses: `dikemas_pada`, `dikirim_pada`, `selesai_pada`, `nomor_resi`, `dibatalkan_oleh`.
