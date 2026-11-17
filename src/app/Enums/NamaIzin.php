@@ -21,6 +21,7 @@ enum NamaIzin: string
     case PesananProses = 'pesanan.proses';
     case PencairanAjukan = 'pencairan.ajukan';
     case PencairanSetujui = 'pencairan.setujui';
+    case AuditLihat = 'audit.lihat';
 
     public function keterangan(): string
     {
@@ -36,6 +37,7 @@ enum NamaIzin: string
             self::PesananProses => 'Memproses pesanan toko sendiri',
             self::PencairanAjukan => 'Mengajukan pencairan saldo',
             self::PencairanSetujui => 'Menyetujui atau menolak pencairan',
+            self::AuditLihat => 'Membaca log audit',
         };
     }
 }

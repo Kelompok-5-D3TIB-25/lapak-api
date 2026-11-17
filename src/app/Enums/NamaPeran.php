@@ -19,7 +19,7 @@ enum NamaPeran: string
             self::Penjual => 'Mengelola produk, memproses pesanan, dan melihat dompet tokonya',
             self::Admin => 'Memoderasi toko dan mengelola peran pengguna',
             self::Keuangan => 'Membaca buku besar; menyetujui pencairan mulai Sesi 5',
-            self::Auditor => 'Membaca buku besar tanpa hak tulis apa pun',
+            self::Auditor => 'Membaca buku besar dan log audit tanpa hak tulis apa pun',
         };
     }
 
@@ -57,6 +57,7 @@ enum NamaPeran: string
             ],
             self::Auditor => [
                 NamaIzin::BukuBesarLihat,
+                NamaIzin::AuditLihat,
             ],
         };
     }
