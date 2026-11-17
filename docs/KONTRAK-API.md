@@ -255,3 +255,11 @@ ditulis. `PeranIzinSeeder` menyalinnya ke basis data. Tidak ada peran yang memeg
   `POST /pesanan/{nomor}/batal` membatalkan satu pesanan yang sudah dibayar dan belum dikirim.
   `POST /checkout/{kode}/batal` membatalkan checkout yang belum dibayar (LP-7, LP-10).
 - Cap waktu proses: `dikemas_pada`, `dikirim_pada`, `selesai_pada`, `nomor_resi`, `dibatalkan_oleh`.
+
+## Kunci lama dan log masuk
+
+- `POST /sesi/konfirmasi` mengganti kunci sesi. Pemakaian kunci lama setelah rotasi mencabut sesinya
+  dan dicatat pada log audit (`sesi.kunci_lama_dipakai`) (LP-14).
+- `POST /masuk` menolak surel yang tidak berbentuk surel sebelum apa pun dicatat. Percobaan masuk
+  yang gagal hanya mencatat surel yang dicoba, tidak pernah kata sandinya.
+- `POST /keluar` mencabut sesi yang dipakai dan dicatat sebagai `sesi.dicabut`.
