@@ -227,3 +227,12 @@ ditulis. `PeranIzinSeeder` menyalinnya ke basis data. Tidak ada peran yang memeg
   basis data; selisih satu rupiah pun dijawab 422 `JUMLAH_TIDAK_COCOK` dan tidak melunasi apa pun.
 - Kabar yang sama boleh tiba berkali-kali. Yang pertama dijawab `"hasil": "dilunasi"`, sisanya
   `"hasil": "sudah_diproses"`, dan uangnya dibukukan satu kali.
+
+## Log audit
+
+- Tindakan yang mengubah uang, stok, atau kewenangan, dan percobaan masuk, meninggalkan jejak pada
+  `log_audit` (LP-17). Yang lain tidak.
+- Penulisan hanya lewat `PencatatAudit`, di dalam transaksi yang sama dengan tindakannya.
+- Rahasia (`kata_sandi`, `kunci`, `hash_kunci`, `rahasia`, `tanda_tangan`) tidak pernah masuk ke log.
+- Pemeriksaan rantai: `php artisan lapak:verifikasi-audit`, atau `GET /audit/rantai` (izin `audit.lihat`).
+- Tidak ada pintu tulis pada `/audit`.
