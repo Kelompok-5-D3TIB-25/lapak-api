@@ -135,7 +135,11 @@ final class BukuBesar
     private function ambilAtauBuat(string $kode, JenisDompet $jenis, ?int $penggunaId): Dompet
     {
         $dompet = Dompet::query()->where('kode', $kode)->first();
-        if ($dompet === null) {
+        if ($dompet !== null) {
+            return $dompet;
+        }
+
+        try {
             $dompet = new Dompet;
             $dompet->forceFill([
                 'kode' => $kode,
@@ -143,8 +147,10 @@ final class BukuBesar
                 'pengguna_id' => $penggunaId,
                 'saldo_rupiah' => 0,
             ])->save();
-        }
 
-        return $dompet;
+            return $dompet;
+        } catch (\Illuminate\Database\UniqueConstraintViolationException) {
+            return Dompet::query()->where('kode', $kode)->lockForUpdate()->firstOrFail();
+        }
     }
 }

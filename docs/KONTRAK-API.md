@@ -236,3 +236,13 @@ ditulis. `PeranIzinSeeder` menyalinnya ke basis data. Tidak ada peran yang memeg
 - Rahasia (`kata_sandi`, `kunci`, `hash_kunci`, `rahasia`, `tanda_tangan`) tidak pernah masuk ke log.
 - Pemeriksaan rantai: `php artisan lapak:verifikasi-audit`, atau `GET /audit/rantai` (izin `audit.lihat`).
 - Tidak ada pintu tulis pada `/audit`.
+
+## Pencairan
+
+- `POST /dompet/pencairan` (izin `pencairan.ajukan`): memindahkan saldo penjual ke dompet `pencairan`
+  sejak diajukan (LP-16). Pencairan minimal `LAPAK_PENCAIRAN_MINIMUM` (bawaan Rp 50.000).
+- Staf keuangan (izin `pencairan.setujui`): `GET /keuangan/pencairan` daftar menunggu,
+  `POST /keuangan/pencairan/{kode}/setujui` dan `.../tolak`.
+- Penyetuju tidak boleh orang yang sama dengan pengaju. Uang baru keluar atas keputusan orang kedua.
+- `LayananDana::lepaskan()` memindahkan komisi lalu bagian penjual; `kembalikan()` mengembalikan
+  seluruh nilai pesanan termasuk ongkir ke dompet `eksternal`.

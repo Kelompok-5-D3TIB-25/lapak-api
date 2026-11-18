@@ -18,6 +18,9 @@ enum JenisDompet: string
     /** Saldo milik seorang penjual; satu dompet per penjual. */
     case Penjual = 'penjual';
 
+    /** Uang yang sedang menunggu keputusan staf keuangan (LP-16). */
+    case Pencairan = 'pencairan';
+
     public function bolehNegatif(): bool
     {
         return $this === self::Eksternal;

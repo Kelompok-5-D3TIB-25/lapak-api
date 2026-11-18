@@ -49,6 +49,29 @@ final class LayananPembayaran
         return Pembayaran::query()->where('checkout_id', $checkout->id)->firstOrFail();
     }
 
+
+    /**
+     * Dipanggil saat pembeli membatalkan checkout yang belum dibayar, di dalam GembokCheckout.
+     *
+     * @return bool false bila tagihan sudah tidak menunggu, misalnya pembayarannya baru saja masuk
+     */
+    public function tandaiDibatalkan(Checkout $checkout): bool
+    {
+        // Dibaca ulang dengan kunci. Dua pembatalan bersamaan antre di baris ini.
+        $pembayaran = Pembayaran::query()
+            ->where('checkout_id', $checkout->id)
+            ->lockForUpdate()
+            ->firstOrFail();
+
+        if ($pembayaran->status !== StatusPembayaran::Menunggu) {
+            return false;
+        }
+
+        $pembayaran->forceFill(['status' => StatusPembayaran::Dibatalkan])->save();
+
+        return true;
+    }
+
     /**
      * Dipanggil pembatalan otomatis, di dalam GembokCheckout.
      *
