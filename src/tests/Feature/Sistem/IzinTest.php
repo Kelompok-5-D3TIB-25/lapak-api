@@ -47,13 +47,9 @@ it('dapat menjalankan seeder berulang kali tanpa menggandakan apa pun', function
 });
 it('menggabungkan izin dari seluruh peran yang dipegang (LP-2)', function () {
     $sri = beriPeranLangsung(Pengguna::factory()->create(), NamaPeran::Pembeli, NamaPeran::Penjual);
-    expect($this->pemeriksa->daftar($sri))->toBe([
-        'dompet.lihat',
-        'keranjang.kelola',
-        'pesanan.buat',
-        'produk.kelola',
-        'toko.buka',
-    ]);
+    expect($this->pemeriksa->daftar($sri))
+        ->toBe($this->izinGabungan(NamaPeran::Pembeli, NamaPeran::Penjual))
+        ->toContain('keranjang.kelola', 'produk.kelola');
 });
 it('tidak memberi izin apa pun kepada pengguna tanpa peran', function () {
     expect($this->pemeriksa->daftar(Pengguna::factory()->create()))->toBe([]);

@@ -33,12 +33,28 @@ enum NamaPeran: string
      */
     public function izinBawaan(): array
     {
+        // Satu izin per baris, sengaja: dua PR yang menambah izin pada peran berbeda, atau pada
+        // tempat berbeda di peran yang sama, tidak menyentuh baris yang sama.
         return match ($this) {
-            self::Pembeli => [NamaIzin::KeranjangKelola, NamaIzin::TokoBuka, NamaIzin::PesananBuat],
-            self::Penjual => [NamaIzin::ProdukKelola, NamaIzin::DompetLihat],
-            self::Admin => [NamaIzin::TokoModerasi, NamaIzin::PeranKelola],
-            self::Keuangan => [NamaIzin::BukuBesarLihat],
-            self::Auditor => [NamaIzin::BukuBesarLihat],
+            self::Pembeli => [
+                NamaIzin::KeranjangKelola,
+                NamaIzin::TokoBuka,
+                NamaIzin::PesananBuat,
+            ],
+            self::Penjual => [
+                NamaIzin::ProdukKelola,
+                NamaIzin::DompetLihat,
+            ],
+            self::Admin => [
+                NamaIzin::TokoModerasi,
+                NamaIzin::PeranKelola,
+            ],
+            self::Keuangan => [
+                NamaIzin::BukuBesarLihat,
+            ],
+            self::Auditor => [
+                NamaIzin::BukuBesarLihat,
+            ],
         };
     }
 }
