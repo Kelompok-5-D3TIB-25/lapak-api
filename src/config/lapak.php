@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'versi' => '0.1.0',
+    'versi' => '1.0.0',
     // LP-8: komisi marketplace, dipotong dari bagian penjual saat dana dilepas.
     'komisi_persen' => (int) env('LAPAK_KOMISI_PERSEN', 5),
     // LP-10: pesanan yang belum dibayar dibatalkan otomatis setelah sekian jam.
