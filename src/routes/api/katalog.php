@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\ModerasiTokoController;
+use App\Http\Controllers\PesananTokoController;
 use App\Http\Controllers\ProdukSayaController;
 use App\Http\Controllers\TokoSayaController;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,22 @@ Route::middleware('auth:sesi')
                 ->name('produk.stok');
         });
     });
+// Pesanan yang masuk ke toko sendiri.
+Route::middleware(['auth:sesi', 'izin:pesanan.proses'])
+    ->prefix('toko-saya/pesanan')
+    ->name('toko-saya.pesanan.')
+    ->group(function (): void {
+        Route::get('/', [PesananTokoController::class, 'index'])->name('index');
+        Route::get('{nomor}', [PesananTokoController::class, 'show'])->name('show');
+
+        Route::post('{nomor}/kemas', [PesananTokoController::class, 'kemas'])->name('kemas');
+        Route::post('{nomor}/kirim', [PesananTokoController::class, 'kirim'])->name('kirim');
+
+        Route::post('{nomor}/batal', [PesananTokoController::class, 'batal'])
+            ->middleware('idempoten')
+            ->name('batal');
+    });
+
 // Pintu admin atas toko.
 Route::middleware(['auth:sesi', 'izin:toko.moderasi'])
     ->prefix('admin/toko')

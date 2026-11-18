@@ -263,3 +263,11 @@ ditulis. `PeranIzinSeeder` menyalinnya ke basis data. Tidak ada peran yang memeg
 - `POST /masuk` menolak surel yang tidak berbentuk surel sebelum apa pun dicatat. Percobaan masuk
   yang gagal hanya mencatat surel yang dicoba, tidak pernah kata sandinya.
 - `POST /keluar` mencabut sesi yang dipakai dan dicatat sebagai `sesi.dicabut`.
+
+## Pintu penjual atas pesanan
+
+- `GET /toko-saya/pesanan` dan `GET /toko-saya/pesanan/{nomor}` (izin `pesanan.proses`):
+  hanya pesanan toko sendiri; nomor orang lain dijawab 404.
+- `POST /toko-saya/pesanan/{nomor}/kemas`, `.../kirim`: memindahkan status, idempoten-tidak perlu
+  (pengulangan dijawab 409). `.../batal`: wajib `Idempotency-Key` (mengembalikan stok dan dana).
+- Penjual melihat alamat kirim hanya setelah pesanan dibayar.
