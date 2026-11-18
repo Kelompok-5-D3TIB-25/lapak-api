@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\PeristiwaAudit;
 use App\Exceptions\PenyesuaianStokDitolak;
 use App\Exceptions\ProdukTidakDapatDibeli;
+use App\Models\Pengguna;
 use App\Models\Produk;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +22,8 @@ use LogicException;
 final class PenjagaStok
 {
     public const MAKSIMUM = 100_000;
+
+    public function __construct(private readonly PencatatAudit $audit) {}
 
     /**
      * Produk yang akan dibeli, beserta tokonya, berkunci nomor produk. Barisnya DIKUNCI sampai
@@ -78,13 +82,13 @@ final class PenjagaStok
      *
      * @throws PenyesuaianStokDitolak 409 LP-4 bila hasilnya negatif atau melewati batas
      */
-    public function sesuaikan(int $idProduk, int $selisih): Produk
+    public function sesuaikan(int $idProduk, int $selisih, ?Pengguna $oleh = null): Produk
     {
         if ($selisih === 0) {
             throw new InvalidArgumentException('Selisih tidak boleh nol.');
         }
 
-        return DB::transaction(function () use ($idProduk, $selisih): Produk {
+        return DB::transaction(function () use ($idProduk, $selisih, $oleh): Produk {
             // Baris yang sama dengan yang dikunci ambil(): penjual dan pembeli saling menunggu.
             $produk = Produk::query()->lockForUpdate()->findOrFail($idProduk);
             $baru = $produk->stok + $selisih;
@@ -103,6 +107,11 @@ final class PenjagaStok
 
             $produk->stok = $baru;
             $produk->save();
+
+            $this->audit->catat(PeristiwaAudit::StokDisesuaikan, $oleh, "produk:{$produk->id}", [
+                'selisih' => $selisih,
+                'stok' => $baru,
+            ]);
 
             return $produk;
         });

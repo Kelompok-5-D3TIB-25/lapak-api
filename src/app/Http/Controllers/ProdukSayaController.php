@@ -63,7 +63,7 @@ final class ProdukSayaController extends Controller
         $produk = $this->produkSaya($request, $id);
 
         return $this->sukses(ProdukSayaResource::make(
-            $stok->sesuaikan($produk->id, $request->integer('selisih')),
+            $stok->sesuaikan($produk->id, $request->integer('selisih'), $request->user()),
         ));
     }
 
