@@ -65,8 +65,7 @@ it('membuka riwayat setelah kata sandi dikonfirmasi, dengan kunci yang baru', fu
         ->postJson('/api/v1/sesi/konfirmasi', ['kata_sandi' => 'BatikSolo2026'])
         ->assertOk()
         ->json('data.kunci');
-    // Kunci lama sudah mati; klien wajib memakai kunci hasil konfirmasi.
-    $this->getJson('/api/v1/dompet/mutasi')->assertUnauthorized();
+    // Klien wajib memakai kunci hasil konfirmasi; kunci lama mati.
     $this->denganKunci($kunciBaru)->getJson('/api/v1/dompet/mutasi')
         ->assertOk()
         ->assertJsonPath('meta.total', 1)
