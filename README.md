@@ -2,6 +2,8 @@
 
 Marketplace UMKM Solo Raya. Studi kasus tim Praktik Pemrograman Back End, D3 Teknik Informatika UNS.
 
+Versi saat ini: **1.0.0** (SemVer MAYOR.MINOR.TAMBALAN). Log perubahan ada pada CHANGELOG.md.
+
 ## Tim
 
 | Nama | NIM | GitHub | Domain |
@@ -52,5 +54,8 @@ docker compose exec app php artisan lapak:periksa-buku
 - [`docs/domain/`](docs/domain/) — piagam tiap domain
 - [`docs/sesi/SESI-1.md`](docs/sesi/SESI-1.md) — papan Sesi 1
 - [`docs/sesi/SESI-2.md`](docs/sesi/SESI-2.md) — papan Sesi 2
+- [`docs/sesi/SESI-5.md`](docs/sesi/SESI-5.md) — papan Sesi 5
+- [`docs/RILIS.md`](docs/RILIS.md) — daftar periksa rilis
+- [`CHANGELOG.md`](CHANGELOG.md) — catatan perubahan
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — aturan cabang dan PR
 - [`scripts/rekap-sesi.sh`](scripts/rekap-sesi.sh) — rekap kontribusi per sesi
