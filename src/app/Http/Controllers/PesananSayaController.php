@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Domain\Pesanan\PelakuPesanan;
+use App\Http\Requests\AlasanBatalRequest;
 use App\Http\Resources\PembayaranResource;
 use App\Http\Resources\PesananResource;
+use App\Models\Checkout;
 use App\Models\Pesanan;
-use App\Services\LayananPembayaran;
+use App\Services\LayananPesanan;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-/** Pesanan milik pembeli yang sedang masuk. Seluruh kuerinya berangkat dari scopeMilikPembeli. */
 final class PesananSayaController extends Controller
 {
-    /** GET /pesanan: terbaru lebih dulu. */
     public function index(Request $request): JsonResponse
     {
         $halaman = Pesanan::query()
@@ -26,13 +27,9 @@ final class PesananSayaController extends Controller
         return $this->berhalaman($halaman, PesananResource::class);
     }
 
-    /**
-     * GET /pesanan/{nomor}. Nomor pesanan orang lain dijawab 404, sama seperti nomor yang tidak
-     * pernah ada. Nomor pesanan berurutan dan mudah ditebak; yang menjaganya adalah kueri ini.
-     */
     public function show(
         Request $request,
-        LayananPembayaran $pembayaran,
+        \App\Services\LayananPembayaran $pembayaran,
         string $nomor,
     ): JsonResponse {
         $pesanan = Pesanan::query()
@@ -45,5 +42,62 @@ final class PesananSayaController extends Controller
             'pesanan' => PesananResource::make($pesanan),
             'pembayaran' => PembayaranResource::make($pembayaran->untuk($pesanan->checkout)),
         ]);
+    }
+
+    public function terima(Request $request, LayananPesanan $layanan, string $nomor): JsonResponse
+    {
+        $pesanan = $layanan->terima(
+            $this->pesananSaya($request, $nomor), PelakuPesanan::Pembeli, $request->user(),
+        );
+
+        return $this->sukses(PesananResource::make($pesanan->load(['toko', 'butir'])));
+    }
+
+    public function batal(
+        AlasanBatalRequest $request,
+        LayananPesanan $layanan,
+        string $nomor,
+    ): JsonResponse {
+        $pesanan = $layanan->batalkan(
+            $this->pesananSaya($request, $nomor),
+            PelakuPesanan::Pembeli,
+            $request->user(),
+            $request->alasan(),
+        );
+
+        return $this->sukses(PesananResource::make($pesanan->load(['toko', 'butir'])));
+    }
+
+    public function batalCheckout(
+        AlasanBatalRequest $request,
+        LayananPesanan $layanan,
+        string $kode,
+    ): JsonResponse {
+        $checkout = Checkout::query()
+            ->where('pembeli_id', $request->user()->id)
+            ->where('kode', $kode)
+            ->firstOrFail();
+
+        $batal = $layanan->batalkanCheckout(
+            $checkout->id, PelakuPesanan::Pembeli, $request->user(), $request->alasan(),
+        );
+
+        if (! $batal) {
+            throw new \App\Exceptions\GalatDomain(
+                'LP-10', 'Checkout ini sudah dibayar atau sudah ditutup.', 409,
+            );
+        }
+
+        return $this->sukses(
+            \App\Http\Resources\CheckoutResource::make($checkout->load(['pesanan.toko', 'pesanan.butir'])),
+        );
+    }
+
+    private function pesananSaya(Request $request, string $nomor): Pesanan
+    {
+        return Pesanan::query()
+            ->milikPembeli($request->user())
+            ->where('nomor', $nomor)
+            ->firstOrFail();
     }
 }
